@@ -2,11 +2,9 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
+  constructor() {}
 
-    constructor() { }
-
-    makeUser() {
-        return "Make user"
-
-    }
+  makeUser() {
+    return 'Make user';
+  }
 }
