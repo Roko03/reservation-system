@@ -37,11 +37,27 @@ export class AuthService {
                 }
             }
         }
-
     }
 
     async signIn(dto: SignInDto): Promise<Tokens> {
-        return { access_token: "", refresh_token: "" }
+
+        const user = await this.prisma.user.findUnique({
+            where: {
+                email: dto.email
+            }
+        })
+
+        if (!user) throw new ForbiddenException("Korisnik ne postoji");
+
+        const passwordMatch = await bcrypt.compare(dto.password, user.password);
+
+        if (!passwordMatch) throw new ForbiddenException("Netočna šifra");
+
+        const tokens = await this.getTokens(user.id, user.email);
+
+        await this.updateRtHash(user.id, tokens.refresh_token);
+
+        return tokens;
     }
 
     logout() { }
