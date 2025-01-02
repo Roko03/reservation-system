@@ -21,4 +21,13 @@ export class UserService {
 
     return user;
   }
+
+  async deleteUser() {
+    await this.prisma.user.delete({
+      where: {
+        id: 'tx7n329750phz58v9cp1pzly',
+      },
+    });
+    return 'Korisnik uspješno izbrisan';
+  }
 }
