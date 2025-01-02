@@ -22,10 +22,11 @@ model User {
 }
 
 model RefreshToken {
-  id       String @id @default(cuid(2))
-  hashedRt String
-  userId   String
-  user     User   @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid(2))
+  hashedRt  String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }
 
 enum Role {
