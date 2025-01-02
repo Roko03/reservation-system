@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { AuthDto } from './dto';
+import { AuthDto, SignInDto } from './dto';
 import * as bcrypt from 'bcrypt'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Tokens } from './types';
@@ -40,7 +40,9 @@ export class AuthService {
 
     }
 
-    singIn() { }
+    async signIn(dto: SignInDto): Promise<Tokens> {
+        return { access_token: "", refresh_token: "" }
+    }
 
     logout() { }
 
