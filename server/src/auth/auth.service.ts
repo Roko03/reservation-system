@@ -79,7 +79,7 @@ export class AuthService {
 
         const refreshToken = await this.prisma.refreshToken.findFirst({
             where: {
-                userId
+                userId: user.id
             },
             orderBy: {
                 createdAt: "desc"
