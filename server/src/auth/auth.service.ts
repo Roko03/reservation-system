@@ -62,12 +62,14 @@ export class AuthService {
         return tokens;
     }
 
-    async logout(userId: string) {
+    async logout(userId: string): Promise<{ message: string }> {
         await this.prisma.refreshToken.deleteMany({
             where: {
                 userId: userId,
             }
         })
+
+        return { message: "Korisnik uspješno odjavljen" }
     }
 
     async refreshTokens(userId: string, rt: string) {
