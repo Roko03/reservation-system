@@ -5,10 +5,12 @@ import * as bcrypt from 'bcrypt'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { config } from 'process';
 
 @Injectable()
 export class AuthService {
-    constructor(private prisma: PrismaService, private jwtService: JwtService) { }
+    constructor(private prisma: PrismaService, private jwtService: JwtService, private config: ConfigService) { }
 
     async signUp(dto: AuthDto): Promise<Tokens> {
 
@@ -110,14 +112,14 @@ export class AuthService {
                 email,
             }, {
                 expiresIn: 60 * 15,
-                secret: "at-secret"
+                secret: this.config.get("ACCESS_TOKEN_SECRET")
             }),
             this.jwtService.signAsync({
                 sub: userId,
                 email,
             }, {
                 expiresIn: 60 * 60 * 24 * 7,
-                secret: "rt-secret"
+                secret: this.config.get("REFRESH_TOKEN_SECRET")
             })
         ])
 
