@@ -60,7 +60,13 @@ export class AuthService {
         return tokens;
     }
 
-    logout() { }
+    async logout(userId: string) {
+        await this.prisma.refreshToken.deleteMany({
+            where: {
+                userId: userId,
+            }
+        })
+    }
 
     refreshTokens() { }
 
