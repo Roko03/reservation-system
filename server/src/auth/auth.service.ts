@@ -70,6 +70,8 @@ export class AuthService {
 
         if (!user.isVerified) throw new UnauthorizedException("Korisnik nije verificiran");
 
+        if (user.userAgent !== "regular") throw new UnauthorizedException("Korisnik je registriran preko Googla")
+
         const tokens = await this.getTokens(user.id, user.email, user.role);
 
         res.cookie("refreshToken", tokens.refresh_token, {
