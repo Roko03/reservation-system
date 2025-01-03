@@ -3,16 +3,16 @@ import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto, SignInDto } from './dto';
 import * as bcrypt from 'bcrypt'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { AToken, Tokens } from './types';
+import { AToken, JwtPayload, Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class AuthService {
     constructor(private prisma: PrismaService, private jwtService: JwtService, private config: ConfigService) { }
 
-    async signUp(dto: AuthDto): Promise<Tokens> {
+    async signUp(dto: AuthDto) {
 
         const passwordHash = await this.hashData(dto.password)
 
@@ -27,11 +27,7 @@ export class AuthService {
                 }
             })
 
-            const tokens = await this.getTokens(user.id, user.email, user.role);
-
-            await this.updateRtHash(user.id, tokens.refresh_token);
-
-            return tokens
+            return "Korisnik uspješno registriran"
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === "P2002") {
@@ -84,7 +80,7 @@ export class AuthService {
         return { message: "Korisnik uspješno odjavljen" }
     }
 
-    async refreshTokens(userId: string, rt: string) {
+    async refreshHandler(userId: string, req: Request, res: Response): Promise<AToken> {
         const user = await this.prisma.user.findUnique({
             where: {
                 id: userId
@@ -93,26 +89,40 @@ export class AuthService {
 
         if (!user) throw new ForbiddenException("Access Denied")
 
-        const refreshToken = await this.prisma.refreshToken.findFirst({
-            where: {
-                userId: user.id
-            },
-            orderBy: {
-                createdAt: "desc"
-            }
+        const refreshToken = req.cookies.refreshToken
+
+        if (!refreshToken) {
+            res.cookie("refreshToken", "", {
+                sameSite: "none",
+                httpOnly: true,
+                maxAge: 0
+            })
+            throw new UnauthorizedException("Potreban je token")
+        }
+
+        const payload = await this.jwtService.verify(refreshToken, {
+            secret: this.config.get("REFRESH_TOKEN_SECRET")
+        }) as JwtPayload
+
+        if (!payload) {
+            res.cookie("refreshToken", "", {
+                sameSite: "none",
+                httpOnly: true,
+                maxAge: 0
+            })
+            throw new UnauthorizedException("Token je istekao ili ne postoji")
+        }
+
+        const token = await this.jwtService.signAsync({
+            sub: user.id,
+            email: user.email,
+            role: user.role
+        }, {
+            expiresIn: 60 * 15,
+            secret: this.config.get("ACCESS_TOKEN_SECRET")
         })
 
-        if (!refreshToken) throw new ForbiddenException("Access Denied")
-
-        const rtMatch = await bcrypt.compare(rt, refreshToken.hashedRt);
-
-        if (!rtMatch) throw new ForbiddenException("Token je istekao")
-
-        const tokens = await this.getTokens(user.id, user.email, user.role);
-
-        await this.updateRtHash(user.id, tokens.refresh_token);
-
-        return tokens
+        return { access_token: token }
     }
 
     hashData(data: string) {
@@ -140,16 +150,5 @@ export class AuthService {
         ])
 
         return { access_token: at, refresh_token: rt }
-    }
-
-    async updateRtHash(userId: string, rt: string) {
-        const hash = await this.hashData(rt);
-
-        await this.prisma.refreshToken.create({
-            data: {
-                userId: userId,
-                hashedRt: hash,
-            }
-        });
     }
 }

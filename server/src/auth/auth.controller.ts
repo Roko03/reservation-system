@@ -2,9 +2,9 @@ import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res, UseGuards } fro
 import { AuthService } from './auth.service';
 import { AuthDto, SignInDto } from './dto';
 import { AToken, Tokens } from './types';
-import { RtGuard } from '../common/guards';
+import { AtGuard, RtGuard } from '../common/guards';
 import { GetCurrentUser, GetCurrentUserId, Public } from '../common/decorators';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -13,7 +13,7 @@ export class AuthController {
     @Public()
     @Post('signup')
     @HttpCode(HttpStatus.CREATED)
-    signUp(@Body() dto: AuthDto): Promise<Tokens> {
+    signUp(@Body() dto: AuthDto) {
         return this.authService.signUp(dto)
     }
 
@@ -30,11 +30,9 @@ export class AuthController {
         return this.authService.logout(userId, res)
     }
 
-    @Public()
-    @UseGuards(RtGuard)
     @Post('refresh')
     @HttpCode(HttpStatus.OK)
-    refreshTokens(@GetCurrentUserId() userId: string, @GetCurrentUser("refreshToken") refreshToken: string) {
-        return this.authService.refreshTokens(userId, refreshToken)
+    refreshHandler(@GetCurrentUserId() userId: string, @Req() req: Request, @Res({ passthrough: true }) res: Response): Promise<AToken> {
+        return this.authService.refreshHandler(userId, req, res)
     }
 }
