@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Param, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto, SignInDto } from './dto';
 import { AToken, Tokens } from './types';
@@ -22,6 +22,13 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     signIn(@Body() dto: SignInDto, @Res({ passthrough: true }) res: Response): Promise<AToken> {
         return this.authService.signIn(dto, res)
+    }
+
+    @Public()
+    @Patch("verify/:id")
+    @HttpCode(HttpStatus.OK)
+    verifyUser(@Param("id") id: string): Promise<{ message: string }> {
+        return this.authService.verifyUser(id);
     }
 
     @Post('logout')

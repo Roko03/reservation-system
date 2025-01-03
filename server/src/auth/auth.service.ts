@@ -66,6 +66,36 @@ export class AuthService {
         return { access_token: tokens.access_token };
     }
 
+
+    async verifyUser(id: string): Promise<{ message: string }> {
+        const verifyToken = await this.prisma.token.findFirst({
+            where: {
+                tokenValue: id
+            }
+        })
+
+        if (!verifyToken) throw new ForbiddenException("Verificirani token ne postoji");
+
+        const user = await this.prisma.user.update({
+            where: {
+                id: verifyToken.userId
+            },
+            data: {
+                isVerified: true
+            }
+        })
+
+        if (!user) throw new ForbiddenException("Neuspjela verifikacija")
+
+        await this.prisma.token.delete({
+            where: {
+                id: verifyToken.id
+            }
+        })
+
+        return { message: "Korisnik je verificiran" }
+    }
+
     async logout(userId: string, res: Response): Promise<{ message: string }> {
         const user = await this.prisma.user.findUnique({
             where: {
@@ -119,7 +149,7 @@ export class AuthService {
             throw new UnauthorizedException("Token je istekao ili ne postoji")
         }
 
-        const token = await this.jwtService.signAsync({
+        const accessToken = await this.jwtService.signAsync({
             sub: user.id,
             email: user.email,
             role: user.role
@@ -128,7 +158,7 @@ export class AuthService {
             secret: this.config.get("ACCESS_TOKEN_SECRET")
         })
 
-        return { access_token: token }
+        return { access_token: accessToken }
     }
 
     hashData(data: string) {
