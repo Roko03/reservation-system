@@ -65,10 +65,13 @@ export class AuthService {
     }
 
     async logout(userId: string, res: Response): Promise<{ message: string }> {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id: userId
+            }
+        })
 
-        if (!userId) {
-            throw new UnauthorizedException("Korisnik ne postoji")
-        }
+        if (!user) throw new ForbiddenException("Korisnik ne postoji")
 
         res.cookie("refreshToken", "", {
             sameSite: "none",
