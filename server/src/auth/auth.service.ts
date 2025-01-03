@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto, SignInDto } from './dto';
 import * as bcrypt from 'bcrypt'
@@ -6,7 +6,6 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { config } from 'process';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +26,7 @@ export class AuthService {
                 }
             })
 
-            const tokens = await this.getTokens(user.id, user.email);
+            const tokens = await this.getTokens(user.id, user.email, user.role);
 
             await this.updateRtHash(user.id, tokens.refresh_token);
 
@@ -55,7 +54,9 @@ export class AuthService {
 
         if (!passwordMatch) throw new ForbiddenException("Netočna šifra");
 
-        const tokens = await this.getTokens(user.id, user.email);
+        if (!user.isVerified) throw new UnauthorizedException("Korisnik nije verificiran");
+
+        const tokens = await this.getTokens(user.id, user.email, user.role);
 
         await this.updateRtHash(user.id, tokens.refresh_token);
 
@@ -96,7 +97,7 @@ export class AuthService {
 
         if (!rtMatch) throw new ForbiddenException("Token je istekao")
 
-        const tokens = await this.getTokens(user.id, user.email);
+        const tokens = await this.getTokens(user.id, user.email, user.role);
 
         await this.updateRtHash(user.id, tokens.refresh_token);
 
@@ -107,11 +108,12 @@ export class AuthService {
         return bcrypt.hash(data, 10);
     }
 
-    async getTokens(userId: string, email: string): Promise<Tokens> {
+    async getTokens(userId: string, email: string, role: string): Promise<Tokens> {
         const [at, rt] = await Promise.all([
             this.jwtService.signAsync({
                 sub: userId,
                 email,
+                role
             }, {
                 expiresIn: 60 * 15,
                 secret: this.config.get("ACCESS_TOKEN_SECRET")
@@ -119,6 +121,7 @@ export class AuthService {
             this.jwtService.signAsync({
                 sub: userId,
                 email,
+                role
             }, {
                 expiresIn: 60 * 60 * 24 * 7,
                 secret: this.config.get("REFRESH_TOKEN_SECRET")
