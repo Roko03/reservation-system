@@ -3,9 +3,10 @@ import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto, SignInDto } from './dto';
 import * as bcrypt from 'bcrypt'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { Tokens } from './types';
+import { AToken, Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -40,7 +41,7 @@ export class AuthService {
         }
     }
 
-    async signIn(dto: SignInDto): Promise<Tokens> {
+    async signIn(dto: SignInDto, res: Response): Promise<AToken> {
 
         const user = await this.prisma.user.findUnique({
             where: {
@@ -58,17 +59,24 @@ export class AuthService {
 
         const tokens = await this.getTokens(user.id, user.email, user.role);
 
-        await this.updateRtHash(user.id, tokens.refresh_token);
+        res.cookie("refreshToken", tokens.refresh_token, { sameSite: "none", httpOnly: true, maxAge: 60 * 60 * 24 });
 
-        return tokens;
+        return { access_token: tokens.access_token };
     }
 
-    async logout(userId: string): Promise<{ message: string }> {
-        await this.prisma.refreshToken.deleteMany({
-            where: {
-                userId: userId,
-            }
+    async logout(userId: string, res: Response): Promise<{ message: string }> {
+
+        if (!userId) {
+            throw new UnauthorizedException("Korisnik ne postoji")
+        }
+
+        res.cookie("refreshToken", "", {
+            sameSite: "none",
+            httpOnly: true,
+            maxAge: 0
         })
+
+        res.clearCookie("refreshToken")
 
         return { message: "Korisnik uspješno odjavljen" }
     }

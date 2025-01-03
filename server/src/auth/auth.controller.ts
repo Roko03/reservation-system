@@ -1,9 +1,10 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto, SignInDto } from './dto';
-import { Tokens } from './types';
+import { AToken, Tokens } from './types';
 import { RtGuard } from '../common/guards';
 import { GetCurrentUser, GetCurrentUserId, Public } from '../common/decorators';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -19,14 +20,14 @@ export class AuthController {
     @Public()
     @Post('signin')
     @HttpCode(HttpStatus.OK)
-    signIn(@Body() dto: SignInDto): Promise<Tokens> {
-        return this.authService.signIn(dto)
+    signIn(@Body() dto: SignInDto, @Res({ passthrough: true }) res: Response): Promise<AToken> {
+        return this.authService.signIn(dto, res)
     }
 
     @Post('logout')
     @HttpCode(HttpStatus.OK)
-    logout(@GetCurrentUserId() userId: string): Promise<{ message: string }> {
-        return this.authService.logout(userId)
+    logout(@GetCurrentUserId() userId: string, @Res({ passthrough: true }) res: Response): Promise<{ message: string }> {
+        return this.authService.logout(userId, res)
     }
 
     @Public()
