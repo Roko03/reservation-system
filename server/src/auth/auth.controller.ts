@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Param, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto, SignInDto } from './dto';
 import { AToken, Tokens } from './types';
@@ -9,6 +9,13 @@ import { Request, Response } from 'express';
 @Controller('auth')
 export class AuthController {
     constructor(private authService: AuthService) { }
+
+    @Public()
+    @Get("check")
+    @HttpCode(HttpStatus.OK)
+    checkLogin(@Req() req: Request): Promise<{ isLoggin: boolean }> {
+        return this.authService.checkLogin(req)
+    }
 
     @Public()
     @Post('signup')

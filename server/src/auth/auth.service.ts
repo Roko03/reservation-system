@@ -12,6 +12,17 @@ import { Request, Response } from 'express';
 export class AuthService {
     constructor(private prisma: PrismaService, private jwtService: JwtService, private config: ConfigService) { }
 
+    async checkLogin(req: Request): Promise<{ isLoggin: boolean }> {
+
+        const refreshToken = req.cookies.refreshToken
+
+        if (!refreshToken) {
+            return { isLoggin: false }
+        }
+
+        return { isLoggin: true }
+    }
+
     async signUp(dto: AuthDto) {
 
         const passwordHash = await this.hashData(dto.password)
@@ -65,7 +76,6 @@ export class AuthService {
 
         return { access_token: tokens.access_token };
     }
-
 
     async verifyUser(id: string): Promise<{ message: string }> {
         const verifyToken = await this.prisma.token.findFirst({
