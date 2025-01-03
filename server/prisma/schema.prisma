@@ -8,26 +8,26 @@ datasource db {
 }
 
 model User {
-  id           String         @id @default(cuid(2))
-  firstname    String
-  lastName     String
-  email        String         @unique
-  password     String
-  phoneNumber  String
-  profileImage String?
-  role         Role           @default(USER)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  isVerified   Boolean        @default(false)
-  RefreshToken RefreshToken[]
+  id            String   @id @default(cuid(2))
+  firstname     String
+  lastName      String
+  email         String   @unique
+  password      String
+  phoneNumber   String
+  profileImage  String?
+  role          Role     @default(USER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  isVerified    Boolean  @default(false)
+  verifiedToken Token?
 }
 
-model RefreshToken {
-  id        String   @id @default(cuid(2))
-  hashedRt  String
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
+model Token {
+  id         String   @id @default(cuid(2))
+  tokenValue String   @default(uuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
 }
 
 enum Role {

@@ -27,7 +27,13 @@ export class AuthService {
                 }
             })
 
-            return "Korisnik uspješno registriran"
+            const token = await this.prisma.token.create({
+                data: {
+                    userId: user.id
+                }
+            })
+
+            return { token: token.tokenValue }
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === "P2002") {
