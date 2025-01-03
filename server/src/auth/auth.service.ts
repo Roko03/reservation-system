@@ -72,7 +72,12 @@ export class AuthService {
 
         const tokens = await this.getTokens(user.id, user.email, user.role);
 
-        res.cookie("refreshToken", tokens.refresh_token, { sameSite: "none", httpOnly: true, maxAge: 60 * 60 * 24 });
+        res.cookie("refreshToken", tokens.refresh_token, {
+            sameSite: "none",
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: this.config.get("REFRESH_COOKIE_LIFETIME")
+        });
 
         return { access_token: tokens.access_token };
     }
@@ -118,6 +123,7 @@ export class AuthService {
         res.cookie("refreshToken", "", {
             sameSite: "none",
             httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
             maxAge: 0
         })
 
@@ -141,6 +147,7 @@ export class AuthService {
             res.cookie("refreshToken", "", {
                 sameSite: "none",
                 httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
                 maxAge: 0
             })
             throw new UnauthorizedException("Potreban je token")
@@ -154,6 +161,7 @@ export class AuthService {
             res.cookie("refreshToken", "", {
                 sameSite: "none",
                 httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
                 maxAge: 0
             })
             throw new UnauthorizedException("Token je istekao ili ne postoji")
@@ -164,7 +172,7 @@ export class AuthService {
             email: user.email,
             role: user.role
         }, {
-            expiresIn: 60 * 15,
+            expiresIn: this.config.get("ACCESS_TOKEN_LIFETIME"),
             secret: this.config.get("ACCESS_TOKEN_SECRET")
         })
 
@@ -182,7 +190,7 @@ export class AuthService {
                 email,
                 role
             }, {
-                expiresIn: 60 * 15,
+                expiresIn: this.config.get("ACCESS_TOKEN_LIFETIME"),
                 secret: this.config.get("ACCESS_TOKEN_SECRET")
             }),
             this.jwtService.signAsync({
@@ -190,7 +198,7 @@ export class AuthService {
                 email,
                 role
             }, {
-                expiresIn: 60 * 60 * 24 * 7,
+                expiresIn: this.config.get("REFRESH_TOKEN_LIFETIME"),
                 secret: this.config.get("REFRESH_TOKEN_SECRET")
             })
         ])
