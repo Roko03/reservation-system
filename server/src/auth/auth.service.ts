@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto, SignInDto } from './dto';
 import * as bcrypt from 'bcrypt'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { AToken, JwtPayload, Tokens } from './types';
+import { AToken, GoogleAuthData, JwtPayload, Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
@@ -111,6 +111,43 @@ export class AuthService {
         })
 
         return { message: "Korisnik je verificiran" }
+    }
+
+    async googleLogin(res: Response, req: Request): Promise<AToken> {
+        if (!req.user) throw new ForbiddenException("Korisnik ne postoji")
+
+        const googleData = req.user as GoogleAuthData
+
+        try {
+            const user = await this.prisma.user.create({
+                data: {
+                    firstname: googleData.firstName,
+                    lastName: googleData.lastName,
+                    email: googleData.email,
+                    profileImage: googleData.profileImage,
+                    isVerified: googleData.isVerified,
+                    userAgent: "google"
+                }
+            })
+
+            const tokens = await this.getTokens(user.id, user.email, user.role);
+
+            res.cookie("refreshToken", tokens.refresh_token, {
+                sameSite: "none",
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                maxAge: this.config.get("REFRESH_COOKIE_LIFETIME")
+            });
+
+            return { access_token: tokens.access_token };
+
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === "P2002") {
+                    throw new ForbiddenException("Korisnik već postoji")
+                }
+            }
+        }
     }
 
     async logout(userId: string, res: Response): Promise<{ message: string }> {

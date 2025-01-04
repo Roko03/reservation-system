@@ -1,10 +1,10 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto, SignInDto } from './dto';
-import { AToken, Tokens } from './types';
-import { AtGuard, RtGuard } from '../common/guards';
-import { GetCurrentUser, GetCurrentUserId, Public } from '../common/decorators';
+import { AToken } from './types';
+import { GetCurrentUserId, Public } from '../common/decorators';
 import { Request, Response } from 'express';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -36,6 +36,18 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     verifyUser(@Param("id") id: string): Promise<{ message: string }> {
         return this.authService.verifyUser(id);
+    }
+
+    @Public()
+    @UseGuards(AuthGuard("google"))
+    @Get("google/login")
+    googleAuth() { }
+
+    @Public()
+    @UseGuards(AuthGuard("google"))
+    @Get("google/redirect")
+    googleAuthRedirect(@Res({ passthrough: true }) res: Response, @Req() req: Request): Promise<AToken> {
+        return this.authService.googleLogin(res, req)
     }
 
     @Post('logout')
