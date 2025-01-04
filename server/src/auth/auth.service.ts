@@ -63,6 +63,7 @@ export class AuthService {
         })
 
         if (!user) throw new ForbiddenException("Korisnik ne postoji");
+        if (user.userAgent !== "regular") throw new UnauthorizedException("Korisnik je registriran preko Googla")
 
         const passwordMatch = await bcrypt.compare(dto.password, user.password);
 
@@ -70,7 +71,6 @@ export class AuthService {
 
         if (!user.isVerified) throw new UnauthorizedException("Korisnik nije verificiran");
 
-        if (user.userAgent !== "regular") throw new UnauthorizedException("Korisnik je registriran preko Googla")
 
         const tokens = await this.getTokens(user.id, user.email, user.role);
 
@@ -118,8 +118,16 @@ export class AuthService {
 
         const googleData = req.user as GoogleAuthData
 
-        try {
-            const user = await this.prisma.user.create({
+        let user = null;
+
+        user = await this.prisma.user.findUnique({
+            where: {
+                email: googleData.email
+            }
+        })
+
+        if (!user) {
+            user = await this.prisma.user.create({
                 data: {
                     firstname: googleData.firstName,
                     lastName: googleData.lastName,
@@ -128,26 +136,26 @@ export class AuthService {
                     isVerified: googleData.isVerified,
                     userAgent: "google"
                 }
-            })
-
-            const tokens = await this.getTokens(user.id, user.email, user.role);
-
-            res.cookie("refreshToken", tokens.refresh_token, {
-                sameSite: "none",
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                maxAge: this.config.get("REFRESH_COOKIE_LIFETIME")
-            });
-
-            return { access_token: tokens.access_token };
-
-        } catch (error) {
-            if (error instanceof PrismaClientKnownRequestError) {
-                if (error.code === "P2002") {
-                    throw new ForbiddenException("Korisnik već postoji")
+            }).catch(error => {
+                if (error instanceof PrismaClientKnownRequestError) {
+                    if (error.code === "P2002") {
+                        throw new ForbiddenException("Korisnik već postoji")
+                    }
                 }
-            }
+            })
         }
+
+
+        const tokens = await this.getTokens(user.id, user.email, user.role);
+
+        res.cookie("refreshToken", tokens.refresh_token, {
+            sameSite: "none",
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: this.config.get("REFRESH_COOKIE_LIFETIME")
+        });
+
+        return { access_token: tokens.access_token };
     }
 
     async logout(userId: string, res: Response): Promise<{ message: string }> {
