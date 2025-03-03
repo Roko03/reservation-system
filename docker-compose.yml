@@ -1,3 +1,7 @@
+networks:
+  reservation_system:
+    driver: bridge
+
 services:
   db:
     image: postgres:15.2
@@ -7,6 +11,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - 5434:5432
+    networks:
+      - reservation_system
 
   server:
     build:
@@ -21,7 +27,7 @@ services:
       CHOKIDAR_USEPOLLING: "true"
     depends_on:
       - db
-    command: yarn start:dev
+    command: sh -c "npx prisma migrate deploy && yarn start:dev"
     develop:
       watch:
         - action: sync
@@ -31,6 +37,8 @@ services:
             - node_modules/
         - action: rebuild
           path: ./server/package.json
+    networks:
+      - reservation_system
 
   client:
     build:
@@ -55,3 +63,5 @@ services:
             - node_modules/
         - action: rebuild
           path: ./client/package.json
+    networks:
+      - reservation_system
