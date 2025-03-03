@@ -92,7 +92,15 @@ export class ObjectService {
 
     await this.prisma.object.update({
       where: { id },
-      data: updateData,
+      data: {
+        ...updateData,
+        unavailablePeriods: {
+          create: updateData.unavailablePeriods.map((period) => ({
+            startDate: new Date(period.startDate),
+            endDate: new Date(period.endDate),
+          })),
+        },
+      },
     });
 
     return {
