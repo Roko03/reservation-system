@@ -6,6 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guards';
 import { ConfigModule } from '@nestjs/config';
 import { MeModule } from './me/me.module';
+import { ObjectModule } from './object/object.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { MeModule } from './me/me.module';
     PrismaModule,
     AuthModule,
     MeModule,
+    ObjectModule,
   ],
   providers: [
     {

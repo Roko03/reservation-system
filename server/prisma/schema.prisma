@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  SUPERADMIN
+  ADMIN
+  USER
+}
+
 model User {
   id            String   @id @default(cuid(2))
   firstname     String
@@ -31,8 +37,26 @@ model Token {
   createdAt  DateTime @default(now())
 }
 
-enum Role {
-  SUPERADMIN
-  ADMIN
-  USER
+model Object {
+  id          String   @id @default(cuid())
+  name        String
+  location    String
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  workTimeFrom String
+  workTimeTo  String
+
+  unavailablePeriods  UnavailablePeriod[]
 }
+
+model UnavailablePeriod {
+  id          String   @id @default(cuid(2))
+  objectId  String
+  object Object  @relation(fields: [objectId], references: [id])
+  startDate DateTime
+  endDate   DateTime
+
+  @@unique([objectId, startDate, endDate])
+}
+
