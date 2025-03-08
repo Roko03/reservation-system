@@ -1,8 +1,8 @@
 import {
-  BadRequestException,
-  ForbiddenException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
+  HttpStatus,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateRoleDto } from './dto';
@@ -12,34 +12,37 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async editUser(userId: string, dto: UpdateRoleDto) {
-    const userExists = await this.prisma.user.findUnique({
-      where: { id: userId },
-    });
-    if (!userExists) throw new ForbiddenException('Korisnik ne postoji');
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
-    if (userExists.role === 'SUPERADMIN')
+    if (!user) throw new NotFoundException('Korisnik ne postoji');
+
+    if (user.role === 'SUPERADMIN')
       throw new UnauthorizedException('Nije moguće urediti korisnika');
 
-    return await this.prisma.user.update({
-      where: { id: userExists.id },
+    await this.prisma.user.update({
+      where: { id: user.id },
       data: { role: dto.role },
     });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Korisnik uspješno ažuriran',
+    };
   }
 
   async deleteUser(userId: string) {
-    const userExists = await this.prisma.user.findUnique({
-      where: { id: userId },
-    });
-    if (!userExists) throw new ForbiddenException('Korisnik ne postoji');
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
-    if (userExists.role === 'SUPERADMIN')
-      throw new UnauthorizedException('Nije moguće urediti korisnika');
+    if (!user) throw new NotFoundException('Korisnik ne postoji');
 
-    await this.prisma.user.delete({
-      where: {
-        id: userExists.id,
-      },
-    });
-    return 'Korisnik uspješno izbrisan';
+    if (user.role === 'SUPERADMIN')
+      throw new UnauthorizedException('Nije moguće izbrisati korisnika');
+
+    await this.prisma.user.delete({ where: { id: user.id } });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Korisnik uspješno izbrisan',
+    };
   }
 }

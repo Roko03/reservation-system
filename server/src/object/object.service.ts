@@ -3,68 +3,73 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { EditObjectDto, ObjectDto } from './dto';
+import { EditObjectDto, ObjectDto, ReservationDto } from './dto';
 
 @Injectable()
 export class ObjectService {
   constructor(private prisma: PrismaService) {}
 
   async getAllObjects() {
-    try {
-      const allObjects = await this.prisma.object.findMany({});
-
-      return allObjects;
-    } catch (error) {
-      throw new HttpException(
-        'Došlo je do pogreške pri dohvaćanju objekata.',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    return this.prisma.object.findMany({
+      select: {
+        id: true,
+        name: true,
+        location: true,
+        workTimeFrom: true,
+        workTimeTo: true,
+        unavailablePeriods: {
+          select: { startDate: true, endDate: true },
+        },
+      },
+    });
   }
 
   async createObject(dto: ObjectDto) {
-    try {
-      await this.prisma.object.create({
-        data: {
-          ...dto,
-          unavailablePeriods: {
-            create:
-              dto.unavailablePeriods?.map((period) => ({
-                startDate: new Date(period.startDate),
-                endDate: new Date(period.endDate),
-              })) ?? [],
-          },
+    await this.prisma.object.create({
+      data: {
+        ...dto,
+        unavailablePeriods: {
+          create:
+            dto.unavailablePeriods?.map((period) => ({
+              startDate: new Date(period.startDate),
+              endDate: new Date(period.endDate),
+            })) ?? [],
         },
-      });
+      },
+    });
 
-      return 'Objekt uspješno kreiran';
-    } catch (error) {
-      console.error(error); // Debugging: Log the actual error
-      throw new HttpException(
-        'Došlo je do pogreške pri kreiranju objekta.',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'Objekt uspješno kreiran',
+    };
   }
 
   async getObject(id: string) {
-    const object = await this.prisma.object.findUnique({
-      where: { id },
-    });
+    const object = await this.prisma.object.findUnique({ where: { id } });
 
-    if (!object) throw new ForbiddenException('Objekt ne postoji');
+    if (!object) throw new NotFoundException('Objekt ne postoji');
 
     return object;
   }
 
   async editObject(id: string, dto: EditObjectDto) {
-    const objectExist = await this.prisma.object.findUnique({
-      where: { id },
-    });
+    const object = await this.prisma.object.findUnique({ where: { id } });
 
-    if (!objectExist) throw new ForbiddenException('Objekt ne postoji');
+    if (!object) throw new NotFoundException('Objekt ne postoji');
+
+    if (
+      dto.workTimeFrom &&
+      dto.workTimeTo &&
+      dto.workTimeFrom >= dto.workTimeTo
+    ) {
+      throw new HttpException(
+        'Vrijeme početka rada mora biti manje od vremena završetka rada.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     const updateData = Object.fromEntries(
       Object.entries(dto).filter(
@@ -72,62 +77,123 @@ export class ObjectService {
       ),
     );
 
-    if (dto.workTimeFrom && !dto.workTimeTo) {
-      if (dto.workTimeFrom >= objectExist.workTimeTo) {
-        throw new HttpException(
-          'Vrijeme početka rada mora biti manje od vremena završetka rada.',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-    }
-
-    if (!dto.workTimeFrom && dto.workTimeTo) {
-      if (dto.workTimeTo <= objectExist.workTimeFrom) {
-        throw new HttpException(
-          'Vrijeme završetka rada mora biti veće od vremena početka rada.',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-    }
-
     await this.prisma.object.update({
       where: { id },
       data: {
         ...updateData,
         unavailablePeriods: {
-          create: updateData.unavailablePeriods.map((period) => ({
-            startDate: new Date(period.startDate),
-            endDate: new Date(period.endDate),
-          })),
+          create:
+            updateData.unavailablePeriods?.map((period) => ({
+              startDate: new Date(period.startDate),
+              endDate: new Date(period.endDate),
+            })) ?? [],
         },
       },
     });
 
     return {
       statusCode: HttpStatus.OK,
-      message: 'Objekt je uređen',
+      message: 'Objekt uspješno uređen',
     };
   }
 
   async deleteObject(id: string) {
-    const objectExist = await this.prisma.object.findUnique({
-      where: { id },
-    });
+    const object = await this.prisma.object.findUnique({ where: { id } });
 
-    if (!objectExist) throw new ForbiddenException('Objekt ne postoji');
+    if (!object) throw new NotFoundException('Objekt ne postoji');
 
-    await this.prisma.$transaction([
-      this.prisma.unavailablePeriod.deleteMany({
-        where: { objectId: id },
-      }),
-      this.prisma.object.delete({
-        where: { id },
-      }),
+    await Promise.all([
+      this.prisma.unavailablePeriod.deleteMany({ where: { objectId: id } }),
+      this.prisma.reservation.deleteMany({ where: { objectId: id } }),
+      this.prisma.object.delete({ where: { id } }),
     ]);
 
     return {
       statusCode: HttpStatus.OK,
       message: 'Objekt uspješno izbrisan',
+    };
+  }
+
+  async getReservationsByObject(objectId: string) {
+    const objectExists = await this.prisma.object.findUnique({
+      where: { id: objectId },
+    });
+
+    if (!objectExists) throw new NotFoundException('Objekt ne postoji');
+
+    return this.prisma.reservation.findMany({
+      where: { objectId },
+      select: {
+        id: true,
+        startDate: true,
+        endDate: true,
+        user: {
+          select: { firstname: true, lastName: true, email: true },
+        },
+      },
+    });
+  }
+
+  async createReservation(
+    userId: string,
+    objectId: string,
+    dto: ReservationDto,
+  ) {
+    const objectExists = await this.prisma.object.findUnique({
+      where: { id: objectId },
+      include: { unavailablePeriods: true },
+    });
+
+    if (!objectExists) throw new NotFoundException('Objekt ne postoji');
+
+    const startDate = new Date(dto.startDate);
+    const endDate = new Date(dto.endDate);
+
+    const isUnavailable = objectExists.unavailablePeriods.some(
+      (period) => startDate <= period.endDate && endDate >= period.startDate,
+    );
+
+    if (isUnavailable) {
+      throw new ForbiddenException('Objekt nije dostupan u odabranom terminu');
+    }
+
+    const isOverlapping = await this.prisma.reservation.findFirst({
+      where: {
+        objectId,
+        OR: [{ startDate: { lte: endDate }, endDate: { gte: startDate } }],
+      },
+    });
+
+    if (isOverlapping) throw new ForbiddenException('Termin je već zauzet');
+
+    const reservation = await this.prisma.reservation.create({
+      data: {
+        userId,
+        objectId,
+        startDate,
+        endDate,
+      },
+    });
+
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'Rezervacija uspješno kreirana',
+      data: reservation,
+    };
+  }
+
+  async deleteReservation(id: string) {
+    const reservation = await this.prisma.reservation.findUnique({
+      where: { id },
+    });
+
+    if (!reservation) throw new NotFoundException('Rezervacija ne postoji');
+
+    await this.prisma.reservation.delete({ where: { id } });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Rezervacija uspješno izbrisana',
     };
   }
 }

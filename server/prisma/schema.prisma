@@ -13,6 +13,12 @@ enum Role {
   USER
 }
 
+enum ReservationStatus {
+  APPROVED
+  PENDING
+  REJECTED
+}
+
 model User {
   id            String   @id @default(cuid(2))
   firstname     String
@@ -27,6 +33,8 @@ model User {
   isVerified    Boolean  @default(false)
   verifiedToken Token?
   userAgent     String   @default("regular")
+
+  Reservation Reservation[]
 }
 
 model Token {
@@ -48,6 +56,8 @@ model Object {
   workTimeTo  String
 
   unavailablePeriods  UnavailablePeriod[]
+
+  Reservation Reservation[]
 }
 
 model UnavailablePeriod {
@@ -60,3 +70,16 @@ model UnavailablePeriod {
   @@unique([objectId, startDate, endDate])
 }
 
+model Reservation {
+  id          String   @id @default(cuid())
+  objectId  String
+  object Object  @relation(fields: [objectId], references: [id])
+  userId String
+  user       User     @relation(fields: [userId], references: [id])
+  startDate DateTime
+  endDate   DateTime
+  status    ReservationStatus @default(PENDING)
+
+
+  @@unique([objectId, startDate, endDate])
+}

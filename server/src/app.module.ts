@@ -7,6 +7,7 @@ import { AtGuard } from './common/guards';
 import { ConfigModule } from '@nestjs/config';
 import { MeModule } from './me/me.module';
 import { ObjectModule } from './object/object.module';
+import { ReservationModule } from './reservation/reservation.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ObjectModule } from './object/object.module';
     AuthModule,
     MeModule,
     ObjectModule,
+    ReservationModule,
   ],
   providers: [
     {
