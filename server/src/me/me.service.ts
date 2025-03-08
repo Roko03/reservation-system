@@ -28,9 +28,17 @@ export class MeService {
     });
   }
 
-  async getUserReservation(userId: string) {
+  async getUserReservation(
+    userId: string,
+    pageSize: number,
+    currentPage: number,
+  ) {
+    let skip = currentPage * pageSize;
+
     return this.prisma.reservation.findMany({
       where: { userId },
+      take: pageSize,
+      skip,
       select: {
         id: true,
         startDate: true,

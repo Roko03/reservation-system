@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Patch,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -20,8 +21,14 @@ export class UserController {
   @Get()
   @Roles(Role.ADMIN, Role.SUPERADMIN)
   @UseGuards(RolesGuard)
-  getAllUser() {
-    return this.userService.getAllUsers();
+  getAllUser(
+    @Query('pageSize') pageSize: string,
+    @Query('currentPage') currentPage: string,
+  ) {
+    const size = pageSize ? parseInt(pageSize, 10) : 10;
+    const page = currentPage ? parseInt(currentPage, 10) : 0;
+
+    return this.userService.getAllUsers(size, page);
   }
 
   @Patch('/:userId')

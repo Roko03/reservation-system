@@ -7,8 +7,34 @@ import { ReservationStatus } from '@prisma/client';
 export class ReservationService {
   constructor(private prisma: PrismaService) {}
 
-  async getAllReservations() {
+  async getAllReservations(
+    pageSize: number,
+    currentPage: number,
+    filters: {
+      objectId?: string;
+      status?: string;
+      dateFrom?: string;
+      dateTo?: string;
+    },
+  ) {
+    let skip = currentPage * pageSize;
+
+    const where: any = {};
+
+    if (filters.objectId) where.objectId = filters.objectId;
+    if (filters.status) where.status = filters.status;
+
+    if (filters.dateFrom || filters.dateTo) {
+      where.startDate = {};
+
+      if (filters.dateFrom) where.startDate.gte = new Date(filters.dateFrom);
+      if (filters.dateTo) where.startDate.lte = new Date(filters.dateTo);
+    }
+
     return this.prisma.reservation.findMany({
+      where,
+      take: pageSize,
+      skip,
       select: {
         id: true,
         startDate: true,

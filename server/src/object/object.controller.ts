@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ObjectService } from './object.service';
@@ -18,6 +19,18 @@ import { GetCurrentUserId, Public } from '../common/decorators';
 @Controller('object')
 export class ObjectController {
   constructor(private objectService: ObjectService) {}
+
+  @Public()
+  @Get('/all')
+  getAllObjectsName(
+    @Query('pageSize') pageSize: string,
+    @Query('currentPage') currentPage: string,
+  ) {
+    const size = pageSize ? parseInt(pageSize, 10) : 10;
+    const page = currentPage ? parseInt(currentPage, 10) : 0;
+
+    return this.objectService.getAllObjectsName(size, page);
+  }
 
   @Public()
   @Get()
@@ -55,8 +68,15 @@ export class ObjectController {
   @Get('/:id/reservation')
   @Roles(Role.USER, Role.ADMIN, Role.SUPERADMIN)
   @UseGuards(RolesGuard)
-  getReservationsByObject(@Param('id') objectId: string) {
-    return this.objectService.getReservationsByObject(objectId);
+  getReservationsByObject(
+    @Param('id') objectId: string,
+    @Query('pageSize') pageSize: string,
+    @Query('currentPage') currentPage: string,
+  ) {
+    const size = pageSize ? parseInt(pageSize, 10) : 10;
+    const page = currentPage ? parseInt(currentPage, 10) : 0;
+
+    return this.objectService.getReservationsByObject(objectId, size, page);
   }
 
   @Post('/:id/reservation')

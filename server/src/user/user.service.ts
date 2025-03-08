@@ -11,8 +11,12 @@ import { UpdateRoleDto } from './dto';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async getAllUsers() {
+  async getAllUsers(pageSize: number, currentPage: number) {
+    let skip = currentPage * pageSize;
+
     return this.prisma.user.findMany({
+      take: pageSize,
+      skip,
       select: {
         id: true,
         firstname: true,

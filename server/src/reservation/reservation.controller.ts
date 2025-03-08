@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ReservationService } from './reservation.service';
 import { Role } from '@prisma/client';
 import { Roles } from '../common/decorators/roles.decorator';
@@ -12,8 +20,23 @@ export class ReservationController {
   @Get()
   @Roles(Role.ADMIN, Role.SUPERADMIN)
   @UseGuards(RolesGuard)
-  getAllReservations() {
-    return this.reservationService.getAllReservations();
+  getAllReservations(
+    @Query('pageSize') pageSize: string,
+    @Query('currentPage') currentPage: string,
+    @Query('objectId') objectId?: string,
+    @Query('status') status?: string,
+    @Query('dateFrom') dateFrom?: string,
+    @Query('dateTo') dateTo?: string,
+  ) {
+    const size = pageSize ? parseInt(pageSize, 10) : 10;
+    const page = currentPage ? parseInt(currentPage, 10) : 0;
+
+    return this.reservationService.getAllReservations(size, page, {
+      objectId,
+      status,
+      dateFrom,
+      dateTo,
+    });
   }
 
   @Patch('/:id')

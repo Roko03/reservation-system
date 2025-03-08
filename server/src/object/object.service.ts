@@ -12,6 +12,21 @@ import { EditObjectDto, ObjectDto, ReservationDto } from './dto';
 export class ObjectService {
   constructor(private prisma: PrismaService) {}
 
+  async getAllObjectsName(pageSize: number, currentPage: number) {
+    let skip = currentPage * pageSize;
+
+    const objects = await this.prisma.object.findMany({
+      take: pageSize,
+      skip,
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+
+    return objects;
+  }
+
   async getAllObjects() {
     return this.prisma.object.findMany({
       select: {
@@ -114,15 +129,23 @@ export class ObjectService {
     };
   }
 
-  async getReservationsByObject(objectId: string) {
+  async getReservationsByObject(
+    objectId: string,
+    pageSize: number,
+    currentPage: number,
+  ) {
     const objectExists = await this.prisma.object.findUnique({
       where: { id: objectId },
     });
 
     if (!objectExists) throw new NotFoundException('Objekt ne postoji');
 
+    let skip = currentPage * pageSize;
+
     return this.prisma.reservation.findMany({
       where: { objectId },
+      take: pageSize,
+      skip,
       select: {
         id: true,
         startDate: true,

@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Patch,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { MeService } from './me.service';
@@ -26,8 +27,15 @@ export class MeController {
   @Get('/reservation')
   @Roles(Role.USER)
   @UseGuards(RolesGuard)
-  getUserReservation(@GetCurrentUserId() userId: string) {
-    return this.meService.getUserReservation(userId);
+  getUserReservation(
+    @GetCurrentUserId() userId: string,
+    @Query('pageSize') pageSize: string,
+    @Query('currentPage') currentPage: string,
+  ) {
+    const size = pageSize ? parseInt(pageSize, 10) : 10;
+    const page = currentPage ? parseInt(currentPage, 10) : 0;
+
+    return this.meService.getUserReservation(userId, size, page);
   }
 
   @Get('/reservation/:id')
