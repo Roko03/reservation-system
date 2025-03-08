@@ -24,11 +24,12 @@ export class UserController {
   getAllUser(
     @Query('pageSize') pageSize: string,
     @Query('currentPage') currentPage: string,
+    @Query('search') search?: string,
   ) {
     const size = pageSize ? parseInt(pageSize, 10) : 10;
     const page = currentPage ? parseInt(currentPage, 10) : 0;
 
-    return this.userService.getAllUsers(size, page);
+    return this.userService.getAllUsers(size, page, search);
   }
 
   @Patch('/:userId')
