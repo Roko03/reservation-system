@@ -11,6 +11,22 @@ import { UpdateRoleDto } from './dto';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
+  async getAllUsers() {
+    return this.prisma.user.findMany({
+      select: {
+        id: true,
+        firstname: true,
+        lastName: true,
+        email: true,
+        phoneNumber: true,
+        profileImage: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
   async editUser(userId: string, dto: UpdateRoleDto) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
 

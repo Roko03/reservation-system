@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Patch,
   UseGuards,
@@ -15,6 +16,13 @@ import { Role } from '../common/enums/role.enum';
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
+
+  @Get()
+  @Roles(Role.ADMIN, Role.SUPERADMIN)
+  @UseGuards(RolesGuard)
+  getAllUser() {
+    return this.userService.getAllUsers();
+  }
 
   @Patch('/:userId')
   @Roles(Role.ADMIN, Role.SUPERADMIN)

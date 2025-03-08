@@ -13,6 +13,21 @@ import { EditReservationDto } from './dto';
 export class MeService {
   constructor(private prisma: PrismaService) {}
 
+  async getMe(userId: string) {
+    return this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        firstname: true,
+        lastName: true,
+        email: true,
+        phoneNumber: true,
+        profileImage: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
   async getUserReservation(userId: string) {
     return this.prisma.reservation.findMany({
       where: { userId },

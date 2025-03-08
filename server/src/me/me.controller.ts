@@ -18,6 +18,11 @@ import { EditReservationDto } from './dto';
 export class MeController {
   constructor(private meService: MeService) {}
 
+  @Get()
+  getMe(@GetCurrentUserId() userId: string) {
+    return this.meService.getMe(userId);
+  }
+
   @Get('/reservation')
   @Roles(Role.USER)
   @UseGuards(RolesGuard)
