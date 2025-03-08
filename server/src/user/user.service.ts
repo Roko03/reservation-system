@@ -11,10 +11,19 @@ import { UpdateRoleDto } from './dto';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async getAllUsers(pageSize: number, currentPage: number, search?: string) {
+  async getAllUsers(
+    userId: string,
+    pageSize: number,
+    currentPage: number,
+    search?: string,
+  ) {
     let skip = currentPage * pageSize;
 
-    const where: any = {};
+    const where: any = {
+      NOT: {
+        id: userId,
+      },
+    };
 
     if (search) {
       where.OR = [

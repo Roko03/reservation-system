@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MeModule } from './me/me.module';
 import { ObjectModule } from './object/object.module';
 import { ReservationModule } from './reservation/reservation.module';
+import { InfoModule } from './info/info.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ReservationModule } from './reservation/reservation.module';
     MeModule,
     ObjectModule,
     ReservationModule,
+    InfoModule,
   ],
   providers: [
     {

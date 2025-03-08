@@ -13,6 +13,7 @@ import { UpdateRoleDto } from './dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Role } from '../common/enums/role.enum';
+import { GetCurrentUserId } from '../common/decorators';
 
 @Controller('user')
 export class UserController {
@@ -22,6 +23,7 @@ export class UserController {
   @Roles(Role.ADMIN, Role.SUPERADMIN)
   @UseGuards(RolesGuard)
   getAllUser(
+    @GetCurrentUserId() userId: string,
     @Query('pageSize') pageSize: string,
     @Query('currentPage') currentPage: string,
     @Query('search') search?: string,
@@ -29,7 +31,7 @@ export class UserController {
     const size = pageSize ? parseInt(pageSize, 10) : 10;
     const page = currentPage ? parseInt(currentPage, 10) : 0;
 
-    return this.userService.getAllUsers(size, page, search);
+    return this.userService.getAllUsers(userId, size, page, search);
   }
 
   @Patch('/:userId')
