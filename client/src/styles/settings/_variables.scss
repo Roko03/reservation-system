@@ -1,0 +1,25 @@
+@use 'sass:map';
+
+// Colors
+$primary: #646cff;
+$secondary: #61dafb;
+$dark: #c6c6c6;
+$white: #fff;
+$black: #111;
+$black-80: rgba($black, 0.8);
+$black-60: rgba($black, 0.6);
+$black-40: rgba($black, 0.4);
+$black-20: rgba($black, 0.2);
+
+// Fonts
+$primary-font-family: inter, system-ui, avenir, helvetica, arial, sans-serif;
+
+// Breakpoints and sizes
+$breakpoints: (
+  xs: 375px,
+  sm: 640px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1280px,
+);
+$max-width: map.get($breakpoints, 'xl');

@@ -1,0 +1,71 @@
+{
+  "name": "@workspace-studio/react-vite-boilerplate",
+  "version": "1.1.0",
+  "type": "module",
+  "private": true,
+  "author": {
+    "name": "Workspace",
+    "email": "hello@workspace.hr",
+    "url": "https://workspace.hr"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.4.1",
+    "sass": "^1.86.1"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint:base": "eslint --ext .ts,.tsx src/",
+    "lint:styles": "stylelint '**/*.scss' --fix",
+    "lint": "pretty-quick && yarn lint:base --fix --cache --cache-location=./node_modules/.cache/ && yarn lint:styles",
+    "upgrade": "yarn upgrade"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/node": "^22.13.17",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.1",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^6.13.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^8.54.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-config-react": "^1.1.7",
+    "eslint-import-resolver-typescript": "^3.8.3",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.2.5",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.5.3",
+    "pretty-quick": "^4.1.1",
+    "stylelint": "^16.17.0",
+    "stylelint-config-prettier-scss": "^1.0.0",
+    "stylelint-config-standard-scss": "^14.0.0",
+    "stylelint-scss": "^6.11.1",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.4"
+  }
+}

@@ -1,0 +1,16 @@
+@use '@/styles/settings/variables' as *;
+@use '@/styles/utils/rem-calc' as *;
+
+.container {
+  width: 100%;
+  height: rem-calc(100);
+  border-top: rem-calc(1) solid $black-20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  a {
+    color: $black;
+    text-decoration: none;
+  }
+}
