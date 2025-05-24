@@ -1,15 +1,27 @@
 @use 'sass:map';
 
 // Colors
-$primary: #646cff;
-$secondary: #61dafb;
-$dark: #c6c6c6;
-$white: #fff;
-$black: #111;
-$black-80: rgba($black, 0.8);
-$black-60: rgba($black, 0.6);
-$black-40: rgba($black, 0.4);
-$black-20: rgba($black, 0.2);
+$black950: #000;
+$black900: #010101;
+$black800: #333;
+$black700: #4d4d4d;
+$black600: #666;
+$black500: #999;
+$black400: #bdbdbd;
+$black300: #ccc;
+$black200: #e6e6e6;
+$black100: #f8f8f8;
+$black50: #fff;
+$green300: #1da49c;
+$green200: #70bb67;
+$green100: #9adfa0;
+$green50: #e2f0ef;
+$blue200: #193fff;
+$blue100: #cbd3f9;
+$blue50: #43a6d0;
+$red100: #b52a00;
+$red50: #f1e3df;
+$orange: #fa896b;
 
 // Fonts
 $primary-font-family: 'Montserrat', sans-serif;
