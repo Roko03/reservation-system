@@ -25,9 +25,10 @@ export class ReservationService {
     if (filters.status) where.status = filters.status;
 
     if (filters.dateFrom || filters.dateTo) {
-      where.startDate = {};
-      if (filters.dateFrom) where.startDate.gte = new Date(filters.dateFrom);
-      if (filters.dateTo) where.startDate.lte = new Date(filters.dateTo);
+      where.AND = [
+        { startDate: { gte: new Date(filters.dateFrom) } },
+        { endDate: { lte: new Date(filters.dateTo) } },
+      ];
     }
 
     const [reservations, totalCount] = await Promise.all([

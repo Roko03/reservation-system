@@ -34,8 +34,15 @@ export class ObjectController {
 
   @Public()
   @Get()
-  getAllObjects() {
-    return this.objectService.getAllObjects();
+  getAllObjects(
+    @Query('pageSize') pageSize: string,
+    @Query('currentPage') currentPage: string,
+    @Query('search') search?: string,
+  ) {
+    const size = pageSize ? parseInt(pageSize, 10) : 10;
+    const page = currentPage ? parseInt(currentPage, 10) : 0;
+
+    return this.objectService.getAllObjects(size, page, search);
   }
 
   @Post()

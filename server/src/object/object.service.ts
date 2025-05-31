@@ -27,19 +27,41 @@ export class ObjectService {
     return objects;
   }
 
-  async getAllObjects() {
-    return this.prisma.object.findMany({
-      select: {
-        id: true,
-        name: true,
-        location: true,
-        workTimeFrom: true,
-        workTimeTo: true,
-        unavailablePeriods: {
-          select: { startDate: true, endDate: true },
+  async getAllObjects(pageSize: number, currentPage: number, search?: string) {
+    const skip = currentPage * pageSize;
+
+    const where: any = {};
+
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { location: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    const [objects, totalCount] = await this.prisma.$transaction([
+      this.prisma.object.findMany({
+        where,
+        take: pageSize,
+        skip,
+        select: {
+          id: true,
+          name: true,
+          location: true,
+          workTimeFrom: true,
+          workTimeTo: true,
+          unavailablePeriods: {
+            select: { startDate: true, endDate: true },
+          },
         },
-      },
-    });
+      }),
+      this.prisma.object.count({ where }),
+    ]);
+
+    return {
+      entities: objects,
+      totalCount,
+    };
   }
 
   async createObject(dto: ObjectDto) {
