@@ -1,10 +1,12 @@
 import React from 'react';
 
+import Layout from '@/components/Layout';
+
 const Calendar = () => (
-  <div>
+  <Layout>
     <h1>Calendar</h1>
     <p>Calendar page content goes here.</p>
-  </div>
+  </Layout>
 );
 
 export default Calendar;

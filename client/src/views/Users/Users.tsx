@@ -1,5 +1,7 @@
 import React from 'react';
 
-const Users = () => <div>Users</div>;
+import Layout from '@/components/Layout';
+
+const Users = () => <Layout>Users</Layout>;
 
 export default Users;

@@ -1,0 +1,12 @@
+@use '@/styles/settings/variables' as *;
+@use '@/styles/utils/rem-calc' as *;
+@use '@/styles/mixins/breakpoints' as *;
+
+.container {
+  width: rem-calc(360);
+  border-right: rem-calc(1) solid $black400;
+
+  @include media(0, 'md') {
+    display: none;
+  }
+}

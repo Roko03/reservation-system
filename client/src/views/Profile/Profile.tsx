@@ -1,5 +1,7 @@
 import React from 'react';
 
-const Profile = () => <div>Profile</div>;
+import Layout from '@/components/Layout';
+
+const Profile = () => <Layout>Profile</Layout>;
 
 export default Profile;

@@ -1,19 +1,21 @@
+@use '@/styles/settings/variables' as *;
 @use '@/styles/utils/rem-calc' as *;
+@use '@/styles/mixins/breakpoints' as *;
 
 .container {
-  min-height: 100vh;
-  padding: rem-calc(0 8);
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  min-height: 100vh;
 
   .main {
-    padding: rem-calc(80 0);
-    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
+    overflow-y: scroll;
+    max-height: 100vh;
+    padding-bottom: rem-calc(24);
+
+    @include media(0, 'md') {
+      padding-bottom: rem-calc(16);
+    }
   }
 }

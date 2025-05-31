@@ -1,5 +1,7 @@
 import React from 'react';
 
-const MyReservations = () => <div>My Reservation</div>;
+import Layout from '@/components/Layout';
+
+const MyReservations = () => <Layout>My Reservation</Layout>;
 
 export default MyReservations;

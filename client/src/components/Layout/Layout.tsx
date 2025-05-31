@@ -1,5 +1,10 @@
 import React from 'react';
 
+import { Box } from '@mui/material';
+
+import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
+
 import styles from './Layout.module.scss';
 
 interface LayoutProps {
@@ -7,9 +12,13 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => (
-  <div className={styles.container}>
-    <main className={styles.main}>{children}</main>
-  </div>
+  <Box className={styles.container}>
+    <Sidebar />
+    <main className={styles.main}>
+      <Header />
+      {children}
+    </main>
+  </Box>
 );
 
 export default Layout;

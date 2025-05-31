@@ -1,0 +1,18 @@
+@use '@/styles/utils/rem-calc' as *;
+@use '@/styles/mixins/breakpoints' as *;
+
+.container {
+  height: 100%;
+  padding: rem-calc(16 24);
+
+  .link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .list {
+    padding-block: rem-calc(40 16);
+    gap: rem-calc(8);
+  }
+}

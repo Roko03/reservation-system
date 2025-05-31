@@ -1,0 +1,32 @@
+@use '@/styles/utils/rem-calc' as *;
+@use '@/styles/mixins/breakpoints' as *;
+
+.container {
+  width: 100%;
+
+  .toolbar {
+    justify-content: space-between;
+
+    @include media('md') {
+      .menuButton {
+        display: none;
+      }
+    }
+  }
+
+  .adminToolbar {
+    @include media('md') {
+      justify-content: flex-end;
+    }
+  }
+}
+
+.drawer {
+  @include media('md') {
+    display: none;
+  }
+
+  .paper {
+    width: 100%;
+  }
+}

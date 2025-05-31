@@ -1,0 +1,23 @@
+@use '@/styles/settings/variables' as *;
+@use '@/styles/utils/rem-calc' as *;
+
+.container {
+  height: 100%;
+  position: relative;
+  text-size-adjust: none;
+
+  .header {
+    padding: rem-calc(24);
+
+    .close {
+      position: absolute;
+      top: rem-calc(12);
+      right: rem-calc(16);
+    }
+  }
+
+  .list {
+    padding-block: rem-calc(16);
+    gap: rem-calc(16);
+  }
+}

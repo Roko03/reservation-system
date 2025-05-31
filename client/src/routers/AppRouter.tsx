@@ -1,50 +1,83 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import Admin from '@/views/Admin';
-import Calendar from '@/views/Calendar';
-import Home from '@/views/Home';
-import MyReservations from '@/views/MyReservations';
-import Object from '@/views/Object';
-import Objects from '@/views/Objects';
-import Profile from '@/views/Profile';
-import Reservation from '@/views/Reservation';
-import Reservations from '@/views/Reservations';
-import User from '@/views/User';
-import Users from '@/views/Users';
+import AppRoute from '@/components/Auth/AppRoute';
+import Loader from '@/components/Loader';
+import ProtectedLayout from '@/components/ProtectedLayout';
+import { UserRoleName } from '@/model/user.model';
+import Error404 from '@/views/Error404';
+
+const Home = lazy(() => import('@/views/Home'));
+const SignUp = lazy(() => import('@/views/SignUp'));
+const Login = lazy(() => import('@/views/Login'));
+const Admin = lazy(() => import('@/views/Admin'));
+const Calendar = lazy(() => import('@/views/Calendar'));
+const MyReservations = lazy(() => import('@/views/MyReservations'));
+const Object = lazy(() => import('@/views/Object'));
+const Objects = lazy(() => import('@/views/Objects'));
+const Profile = lazy(() => import('@/views/Profile'));
+const Reservation = lazy(() => import('@/views/Reservation'));
+const Reservations = lazy(() => import('@/views/Reservations'));
+const User = lazy(() => import('@/views/User'));
+const Users = lazy(() => import('@/views/Users'));
 
 const AppRouter: React.FC = () => (
   <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="profile" element={<Profile />} />
-      <Route path="my-reservations" element={<MyReservations />} />
-      <Route path="objects">
-        <Route index element={<Objects />} />
-        <Route path=":id" element={<Object />} />
-      </Route>
-      <Route path="reservations">
-        <Route index element={<Reservations />} />
-        <Route path=":id" element={<Reservation />} />
-      </Route>
-      <Route path="admin">
-        <Route index element={<Admin />} />
-        <Route path="objects">
+    <Suspense fallback={<Loader />}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<AppRoute variant="anonymous" component={<Login />} />} />
+        <Route path="/signup" element={<AppRoute variant="anonymous" component={<SignUp />} />} />
+        <Route
+          path="profile"
+          element={<AppRoute variant="protected" accessLevel={[UserRoleName.USER]} component={<Profile />} />}
+        />
+        <Route
+          path="my-reservations"
+          element={<AppRoute variant="protected" accessLevel={[UserRoleName.USER]} component={<MyReservations />} />}
+        />
+        <Route
+          path="objects"
+          element={<AppRoute variant="protected" accessLevel={[UserRoleName.USER]} component={<ProtectedLayout />} />}
+        >
           <Route index element={<Objects />} />
           <Route path=":id" element={<Object />} />
         </Route>
-        <Route path="reservations">
+        <Route
+          path="reservations"
+          element={<AppRoute variant="protected" accessLevel={[UserRoleName.USER]} component={<ProtectedLayout />} />}
+        >
           <Route index element={<Reservations />} />
           <Route path=":id" element={<Reservation />} />
         </Route>
-        <Route path="users">
-          <Route index element={<Users />} />
-          <Route path=":id" element={<User />} />
+        <Route
+          path="admin"
+          element={
+            <AppRoute
+              variant="protected"
+              accessLevel={[UserRoleName.SUPERADMIN, UserRoleName.ADMIN]}
+              component={<ProtectedLayout />}
+            />
+          }
+        >
+          <Route index element={<Admin />} />
+          <Route path="objects">
+            <Route index element={<Objects />} />
+            <Route path=":id" element={<Object />} />
+          </Route>
+          <Route path="reservations">
+            <Route index element={<Reservations />} />
+            <Route path=":id" element={<Reservation />} />
+          </Route>
+          <Route path="users">
+            <Route index element={<Users />} />
+            <Route path=":id" element={<User />} />
+          </Route>
+          <Route path="calendar" element={<Calendar />} />
         </Route>
-        <Route path="calendar" element={<Calendar />} />
-      </Route>
-      <Route path="*" element={<div>Not found</div>} />
-    </Routes>
+        <Route path="*" element={<Error404 />} />
+      </Routes>
+    </Suspense>
   </BrowserRouter>
 );
 
