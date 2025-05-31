@@ -17,7 +17,7 @@ export class UserService {
     currentPage: number,
     search?: string,
   ) {
-    let skip = currentPage * pageSize;
+    const skip = currentPage * pageSize;
 
     const where: any = {
       NOT: {
@@ -27,43 +27,36 @@ export class UserService {
 
     if (search) {
       where.OR = [
-        {
-          firstname: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        },
-        {
-          lastName: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        },
-        {
-          email: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        },
+        { firstname: { contains: search, mode: 'insensitive' } },
+        { lastName: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
       ];
     }
 
-    return this.prisma.user.findMany({
-      where,
-      take: pageSize,
-      skip,
-      select: {
-        id: true,
-        firstname: true,
-        lastName: true,
-        email: true,
-        phoneNumber: true,
-        profileImage: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+    const [users, totalCount] = await this.prisma.$transaction([
+      this.prisma.user.findMany({
+        where,
+        take: pageSize,
+        skip,
+        select: {
+          id: true,
+          firstname: true,
+          lastName: true,
+          email: true,
+          phoneNumber: true,
+          profileImage: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      }),
+      this.prisma.user.count({ where }),
+    ]);
+
+    return {
+      entities: users,
+      totalCount,
+    };
   }
 
   async editUser(userId: string, dto: UpdateRoleDto) {
