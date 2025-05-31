@@ -7,7 +7,7 @@ import cx from 'clsx';
 import navigation from '@/config/navigation.config';
 import { UserRoleName } from '@/model/user.model';
 import { roleGuard } from '@/utils/static/roleGuard';
-import { useAuthStore } from '@/valtion/auth/auth.store';
+import { useAuthStore } from '@/valtio/auth/auth.store';
 
 import styles from './NavigationSample.module.scss';
 

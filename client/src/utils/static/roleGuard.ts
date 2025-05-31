@@ -1,9 +1,9 @@
-import { UserRole, UserRoleName } from '@/model/user.model';
+import { UserRoleName } from '@/model/user.model';
 
-export const roleGuard = (acquiredRoles: readonly UserRole[], requiredRoles?: UserRoleName[]) => {
+export const roleGuard = (acquiredRole: UserRoleName, requiredRoles?: UserRoleName[]) => {
   if (!requiredRoles?.length) {
     return true;
   }
 
-  return acquiredRoles.some(({ roleName }) => requiredRoles?.includes(roleName));
+  return requiredRoles.includes(acquiredRole);
 };

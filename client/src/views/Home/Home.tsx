@@ -6,7 +6,7 @@ import { Box } from '@mui/material';
 import Layout from '@/components/Layout';
 import { UserRoleName } from '@/model/user.model';
 import { roleGuard } from '@/utils/static/roleGuard';
-import { useAuthStore } from '@/valtion/auth/auth.store';
+import { useAuthStore } from '@/valtio/auth/auth.store';
 
 const Home: React.FC = () => {
   const { user } = useAuthStore();

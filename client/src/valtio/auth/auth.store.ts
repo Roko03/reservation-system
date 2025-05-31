@@ -1,20 +1,24 @@
 import { proxy, useSnapshot } from 'valtio';
 
 import { AuthKeys } from '@/config/constants.config';
-import { UserModel, UserRole } from '@/model/user.model';
-
-interface UserAuthModel extends Omit<UserModel, 'role'> {
-  role: readonly UserRole[];
-}
+import { UserModel, UserRoleName } from '@/model/user.model';
 
 interface AuthStore {
-  user: UserAuthModel | null;
+  user: UserModel | null;
   authenticating: boolean;
   token: string | null;
 }
 
 export const authStore = proxy<AuthStore>({
-  user: null,
+  user: {
+    id: '123',
+    firstname: 'roko',
+    lastName: 'ponjarac',
+    email: 'roko@gmail.com',
+    phoneNumber: '',
+    profileImage: '/',
+    role: UserRoleName.ADMIN,
+  },
   authenticating: false,
   token: localStorage.getItem(AuthKeys.TOKEN),
 });

@@ -29,9 +29,8 @@ export const PUT_REQUEST_PARAMETERS = {
   },
 };
 
-export const PAGE_NUMBER = 1;
-export const PAGE_SIZE = 20;
-export const PAGE_SIZE_ANALYTICS = 10;
+export const PAGE_NUMBER = 0;
+export const PAGE_SIZE = 10;
 
 export type SortDirection = 'asc' | 'desc';
 
@@ -48,9 +47,7 @@ export const authHeaders = () => {
   const token = localStorage.getItem(AuthKeys.TOKEN);
 
   if (token) {
-    const { accessToken } = JSON.parse(token);
-
-    headers.append('Authorization', `Bearer ${accessToken}`);
+    headers.append('Authorization', `Bearer ${token}`);
   }
 
   return headers;

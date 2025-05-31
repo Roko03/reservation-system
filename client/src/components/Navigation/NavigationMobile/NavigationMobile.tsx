@@ -1,6 +1,6 @@
 import { UserRoleName } from '@/model/user.model';
 import { roleGuard } from '@/utils/static/roleGuard';
-import { useAuthStore } from '@/valtion/auth/auth.store';
+import { useAuthStore } from '@/valtio/auth/auth.store';
 
 import NavigationMobileAdmin from './NavigationMobileAdmin';
 import NavigationMobileSimple from './NavigationMobileSimple';
