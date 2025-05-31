@@ -17,7 +17,7 @@ export class ReservationService {
       dateTo?: string;
     },
   ) {
-    let skip = currentPage * pageSize;
+    const skip = currentPage * pageSize;
 
     const where: any = {};
 
@@ -26,26 +26,33 @@ export class ReservationService {
 
     if (filters.dateFrom || filters.dateTo) {
       where.startDate = {};
-
       if (filters.dateFrom) where.startDate.gte = new Date(filters.dateFrom);
       if (filters.dateTo) where.startDate.lte = new Date(filters.dateTo);
     }
 
-    return this.prisma.reservation.findMany({
-      where,
-      take: pageSize,
-      skip,
-      select: {
-        id: true,
-        startDate: true,
-        endDate: true,
-        status: true,
-        user: {
-          select: { firstname: true, lastName: true, email: true },
+    const [reservations, totalCount] = await Promise.all([
+      this.prisma.reservation.findMany({
+        where,
+        take: pageSize,
+        skip,
+        select: {
+          id: true,
+          startDate: true,
+          endDate: true,
+          status: true,
+          user: {
+            select: { firstname: true, lastName: true, email: true },
+          },
+          object: { select: { name: true, location: true } },
         },
-        object: { select: { name: true, location: true } },
-      },
-    });
+      }),
+      this.prisma.reservation.count({ where }),
+    ]);
+
+    return {
+      entities: reservations,
+      totalCount,
+    };
   }
 
   async approveReservation(id: string, dto: EditReservationDto) {
