@@ -1,5 +1,7 @@
 import React from 'react';
 
-const Objects = () => <div>Objects</div>;
+import Layout from '@/components/Layout';
+
+const Objects = () => <Layout>Objects</Layout>;
 
 export default Objects;

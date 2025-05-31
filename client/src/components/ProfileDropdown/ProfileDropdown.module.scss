@@ -1,0 +1,20 @@
+@use '@/styles/settings/variables' as *;
+@use '@/styles/utils/rem-calc' as *;
+
+.menuRoot {
+  .paper {
+    margin-top: rem-calc(12);
+    width: rem-calc(148);
+    padding: rem-calc(8);
+    border-radius: rem-calc(8);
+
+    .menuItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      border-radius: rem-calc(4);
+      min-height: rem-calc(40);
+    }
+  }
+}

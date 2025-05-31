@@ -25,7 +25,6 @@ export interface UserModel {
   firstname: string;
   lastName: string;
   email: string;
-  password: string;
   phoneNumber: string;
   profileImage: string;
   role: UserRole[];

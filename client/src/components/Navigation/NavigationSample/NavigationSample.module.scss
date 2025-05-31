@@ -1,0 +1,35 @@
+@use '@/styles/settings/variables' as *;
+@use '@/styles/utils/rem-calc' as *;
+@use '@/styles/mixins/breakpoints' as *;
+
+.root {
+  &.list {
+    display: none;
+    flex-direction: row;
+    gap: rem-calc(16);
+
+    @include media('md') {
+      display: flex;
+    }
+
+    .item {
+      flex-direction: row;
+      width: auto;
+      align-items: center;
+      gap: rem-calc(8);
+      padding: rem-calc(16 8);
+      transition: all $animation-duration-normal $timing-function;
+
+      .listText {
+        color: $black950;
+        flex: initial;
+      }
+
+      &.active {
+        .listText {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

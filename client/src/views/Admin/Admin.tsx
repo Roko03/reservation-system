@@ -1,5 +1,11 @@
 import React from 'react';
 
-const Admin = () => <div>Admin</div>;
+import Layout from '@/components/Layout';
+
+const Admin = () => (
+  <Layout>
+    <div>Admin</div>
+  </Layout>
+);
 
 export default Admin;
