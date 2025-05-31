@@ -5,20 +5,12 @@ export enum UserRoleName {
 }
 
 export const USER_ROLE_NAME_LABEL_MAP = {
-  [UserRoleName.SUPERADMIN]: 'common.superadmin',
-  [UserRoleName.ADMIN]: 'common.admin',
-  [UserRoleName.USER]: 'common.user',
+  [UserRoleName.SUPERADMIN]: 'Superadmin',
+  [UserRoleName.ADMIN]: 'Admin',
+  [UserRoleName.USER]: 'User',
 } as const;
 
-export type UserRole = {
-  roleName: UserRoleName;
-};
-
-export const USER_ROLE_ARRAY = [
-  { roleName: UserRoleName.SUPERADMIN },
-  { roleName: UserRoleName.ADMIN },
-  { roleName: UserRoleName.USER },
-];
+export const USER_ROLE_ARRAY = [UserRoleName.SUPERADMIN, UserRoleName.ADMIN, UserRoleName.USER];
 
 export interface UserModel {
   id: string;
@@ -27,7 +19,7 @@ export interface UserModel {
   email: string;
   phoneNumber: string;
   profileImage: string;
-  role: UserRole[];
+  role: UserRoleName;
   createdAt?: string;
   updatedAt?: boolean;
 }

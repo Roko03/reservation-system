@@ -11,7 +11,7 @@ import { UserRoleName } from '@/model/user.model';
 import colors from '@/styles/themes/colors';
 import useToggleState from '@/utils/hooks/useToggleState';
 import { roleGuard } from '@/utils/static/roleGuard';
-import { useAuthStore } from '@/valtion/auth/auth.store';
+import { useAuthStore } from '@/valtio/auth/auth.store';
 
 import styles from './Header.module.scss';
 

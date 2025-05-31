@@ -1,10 +1,10 @@
 import { Navigate } from 'react-router-dom';
 
 import Loader from '@/components/Loader';
-import { UserRole, UserRoleName } from '@/model/user.model';
+import { UserRoleName } from '@/model/user.model';
 import UserUtils from '@/utils/static/UserUtils';
 import { roleGuard } from '@/utils/static/roleGuard';
-import { useAuthStore } from '@/valtion/auth/auth.store';
+import { useAuthStore } from '@/valtio/auth/auth.store';
 import Error403 from '@/views/Error403';
 
 interface AppRouteProps {
@@ -27,7 +27,7 @@ const AppRoute = ({ component, variant, accessLevel }: AppRouteProps) => {
       return <Error403 />;
     }
 
-    return variant === 'anonymous' ? <Navigate to={UserUtils.getDefaultRoute(user.role as UserRole[])} /> : component;
+    return variant === 'anonymous' ? <Navigate to={UserUtils.getDefaultRoute(user.role)} /> : component;
   }
 
   return variant === 'anonymous' ? component : <Navigate to="/login" />;

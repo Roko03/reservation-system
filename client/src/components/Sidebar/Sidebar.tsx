@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import NavigationSidebar from '@/components/Navigation/NavigationSidebar/NavigationSidebar';
 import { UserRoleName } from '@/model/user.model';
 import { roleGuard } from '@/utils/static/roleGuard';
-import { useAuthStore } from '@/valtion/auth/auth.store';
+import { useAuthStore } from '@/valtio/auth/auth.store';
 
 import styles from './Sidebar.module.scss';
 
