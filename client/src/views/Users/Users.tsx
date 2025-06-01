@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Container, Paper, Stack } from '@mui/material';
+import { Container, Paper, Stack, Typography } from '@mui/material';
 
 import Layout from '@/components/Layout';
 import Pagination from '@/components/Pagination';
@@ -29,7 +29,17 @@ const Users = () => {
     getUsers(page, searchString);
   }, [pageNumber, searchString]);
 
-  if (!users) return null;
+  if (!users) {
+    return (
+      <Layout>
+        <Container maxWidth={false}>
+          <Paper elevation={0}>
+            <Typography>Nema korisnika</Typography>
+          </Paper>
+        </Container>
+      </Layout>
+    );
+  }
 
   return (
     <>
