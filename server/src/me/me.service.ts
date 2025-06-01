@@ -41,8 +41,8 @@ export class MeService {
       skip,
       select: {
         id: true,
-        startDate: true,
-        endDate: true,
+        date: true,
+        time: true,
         object: { select: { id: true, name: true, location: true } },
       },
     });
@@ -53,8 +53,8 @@ export class MeService {
       where: { id: reservationId, userId },
       select: {
         id: true,
-        startDate: true,
-        endDate: true,
+        date: true,
+        time: true,
         object: { select: { id: true, name: true, location: true } },
       },
     });
@@ -73,26 +73,37 @@ export class MeService {
       where: { id: reservationId, userId },
     });
 
-    if (!reservation) throw new NotFoundException('Rezervacija ne postoji');
+    if (!reservation) {
+      throw new NotFoundException('Rezervacija ne postoji');
+    }
 
-    const objectExists = await this.prisma.object.findUnique({
+    const object = await this.prisma.object.findUnique({
       where: { id: reservation.objectId },
       include: { unavailablePeriods: true },
     });
 
-    if (!objectExists) throw new NotFoundException('Objekt ne postoji');
-
-    const startDate = new Date(dto.startDate);
-    const endDate = new Date(dto.endDate);
-
-    if (startDate >= endDate) {
-      throw new BadRequestException(
-        'Datum početka mora biti prije datuma završetka.',
-      );
+    if (!object) {
+      throw new NotFoundException('Objekt ne postoji');
     }
 
-    const isUnavailable = objectExists.unavailablePeriods.some(
-      (period) => startDate <= period.endDate && endDate >= period.startDate,
+    const date = new Date(dto.date);
+    date.setHours(0, 0, 0, 0);
+
+    const [hours, minutes] = dto.time.split(':').map(Number);
+    const time = new Date(0); // Epoch start
+    time.setUTCHours(hours, minutes, 0, 0);
+
+    const isSameDateTime =
+      date.getTime() === reservation.date.getTime() &&
+      time.getTime() === reservation.time.getTime();
+
+    if (isSameDateTime) {
+      throw new BadRequestException('Nema promjena u rezervaciji.');
+    }
+
+    const isUnavailable = object.unavailablePeriods.some(
+      (period) =>
+        date <= new Date(period.endDate) && date >= new Date(period.startDate),
     );
 
     if (isUnavailable) {
@@ -103,7 +114,8 @@ export class MeService {
       where: {
         objectId: reservation.objectId,
         NOT: { id: reservationId },
-        OR: [{ startDate: { lte: endDate }, endDate: { gte: startDate } }],
+        date,
+        time,
       },
     });
 
@@ -113,7 +125,10 @@ export class MeService {
 
     await this.prisma.reservation.update({
       where: { id: reservationId, userId },
-      data: { startDate, endDate },
+      data: {
+        date,
+        time,
+      },
     });
 
     return {

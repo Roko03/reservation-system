@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { EditObjectDto, ObjectDto, ReservationDto } from './dto';
+import { Reservation } from '@prisma/client';
 
 @Injectable()
 export class ObjectService {
@@ -170,8 +171,8 @@ export class ObjectService {
       skip,
       select: {
         id: true,
-        startDate: true,
-        endDate: true,
+        date: true,
+        time: true,
         user: {
           select: { firstname: true, lastName: true, email: true },
         },
@@ -183,40 +184,47 @@ export class ObjectService {
     userId: string,
     objectId: string,
     dto: ReservationDto,
-  ) {
-    const objectExists = await this.prisma.object.findUnique({
+  ): Promise<{
+    statusCode: HttpStatus;
+    message: string;
+    data: Reservation;
+  }> {
+    const object = await this.prisma.object.findUnique({
       where: { id: objectId },
       include: { unavailablePeriods: true },
     });
 
-    if (!objectExists) throw new NotFoundException('Objekt ne postoji');
-
-    const startDate = new Date(dto.startDate);
-    const endDate = new Date(dto.endDate);
-
-    const isUnavailable = objectExists.unavailablePeriods.some(
-      (period) => startDate <= period.endDate && endDate >= period.startDate,
-    );
-
-    if (isUnavailable) {
-      throw new ForbiddenException('Objekt nije dostupan u odabranom terminu');
+    if (!object) {
+      throw new NotFoundException('Objekt ne postoji');
     }
 
-    const isOverlapping = await this.prisma.reservation.findFirst({
+    const date = new Date(dto.date);
+    date.setHours(0, 0, 0, 0);
+
+    const [hours, minutes] = dto.time.split(':').map(Number);
+    const time = new Date(0);
+    time.setUTCHours(hours, minutes, 0, 0);
+
+    const existing = await this.prisma.reservation.findUnique({
       where: {
-        objectId,
-        OR: [{ startDate: { lte: endDate }, endDate: { gte: startDate } }],
+        objectId_date_time: {
+          objectId,
+          date,
+          time,
+        },
       },
     });
 
-    if (isOverlapping) throw new ForbiddenException('Termin je već zauzet');
+    if (existing) {
+      throw new ForbiddenException('Termin je već zauzet');
+    }
 
     const reservation = await this.prisma.reservation.create({
       data: {
         userId,
         objectId,
-        startDate,
-        endDate,
+        date,
+        time,
       },
     });
 

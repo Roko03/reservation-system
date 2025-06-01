@@ -76,10 +76,11 @@ model Reservation {
   object Object  @relation(fields: [objectId], references: [id])
   userId String
   user       User     @relation(fields: [userId], references: [id])
-  startDate DateTime
-  endDate   DateTime
+  date DateTime
+  time   DateTime
   status    ReservationStatus @default(PENDING)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-
-  @@unique([objectId, startDate, endDate])
+  @@unique([objectId, date, time])
 }

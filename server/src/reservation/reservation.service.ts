@@ -21,14 +21,24 @@ export class ReservationService {
 
     const where: any = {};
 
-    if (filters.objectId) where.objectId = filters.objectId;
-    if (filters.status) where.status = filters.status;
+    if (filters.objectId) {
+      where.objectId = filters.objectId;
+    }
+
+    if (filters.status) {
+      where.status = filters.status;
+    }
 
     if (filters.dateFrom || filters.dateTo) {
-      where.AND = [
-        { startDate: { gte: new Date(filters.dateFrom) } },
-        { endDate: { lte: new Date(filters.dateTo) } },
-      ];
+      where.date = {};
+
+      if (filters.dateFrom) {
+        where.date.gte = new Date(filters.dateFrom);
+      }
+
+      if (filters.dateTo) {
+        where.date.lte = new Date(filters.dateTo);
+      }
     }
 
     const [reservations, totalCount] = await Promise.all([
@@ -38,13 +48,22 @@ export class ReservationService {
         skip,
         select: {
           id: true,
-          startDate: true,
-          endDate: true,
+          date: true,
+          time: true,
           status: true,
           user: {
-            select: { firstname: true, lastName: true, email: true },
+            select: {
+              firstname: true,
+              lastName: true,
+              email: true,
+            },
           },
-          object: { select: { name: true, location: true } },
+          object: {
+            select: {
+              name: true,
+              location: true,
+            },
+          },
         },
       }),
       this.prisma.reservation.count({ where }),
