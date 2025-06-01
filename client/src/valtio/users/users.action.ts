@@ -22,14 +22,6 @@ export function clearSelectedUser(): void {
   usersStore.selectedUser = undefined;
 }
 
-export function setSelectedRows(selectedRows: string[]): void {
-  usersStore.selectedRows = selectedRows;
-}
-
-export function clearSelectedRows(): void {
-  usersStore.selectedRows = [];
-}
-
 export function toggleUpdateUserModal(isOpen?: boolean | React.MouseEvent): void {
   usersStore.updateUserModalOpen = typeof isOpen === 'boolean' ? isOpen : !usersStore.updateUserModalOpen;
 }

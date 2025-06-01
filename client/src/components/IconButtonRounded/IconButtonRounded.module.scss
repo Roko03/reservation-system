@@ -1,0 +1,10 @@
+@use '@/styles/settings/variables' as *;
+@use '@/styles/utils/rem-calc' as *;
+
+.root {
+  &.container {
+    border: rem-calc(1) solid $black100;
+    height: rem-calc(40);
+    width: rem-calc(40);
+  }
+}
