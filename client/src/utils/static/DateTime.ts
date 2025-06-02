@@ -3,7 +3,7 @@ import isBetweenPlugin from 'dayjs/plugin/isBetween';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import updateLocale from 'dayjs/plugin/updateLocale';
 
-import { DATE_FORMAT_FULL, DATE_FORMAT_HR } from '@/config/date-time.config';
+import { DATE_FORMAT_FULL, DATE_FORMAT_HR, DATE_FORMAT_TIME } from '@/config/date-time.config';
 
 dayjs.extend(isoWeek);
 dayjs.extend(isBetweenPlugin);
@@ -55,4 +55,12 @@ export default class DateTime {
   public static startOfMonth = (date: Dayjs) => date.startOf('month').format(DATE_FORMAT_FULL);
 
   public static endOfMonth = (date: Dayjs) => date.endOf('month').format(DATE_FORMAT_FULL);
+
+  public static formatTime = (date: Dayjs) => date.format(DATE_FORMAT_TIME);
+
+  public static fromTimeString = (time: string): Dayjs => {
+    const [hours, minutes] = time.split(':').map(Number);
+
+    return dayjs().set('hour', hours).set('minute', minutes).set('second', 0).set('millisecond', 0);
+  };
 }

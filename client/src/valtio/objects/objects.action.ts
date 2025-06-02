@@ -1,16 +1,21 @@
-import { ReservationFilters } from '@/model/reservation.model';
-import ReservationsService from '@/services/reservations.service';
+import ObjectsService from '@/services/objects.service';
 
 import { objectsStore } from './objects.store';
 
-export async function getObjects(page?: number, filters?: ReservationFilters): Promise<void> {
+export async function getObjects(page?: number, search?: string): Promise<void> {
   objectsStore.isLoading = true;
 
-  const { entities, totalCount } = await ReservationsService.getReservations(page, filters);
+  const { entities, totalCount } = await ObjectsService.getObjects(page, search);
 
   objectsStore.isLoading = false;
   objectsStore.objects = entities;
   objectsStore.totalCount = totalCount;
+}
+
+export async function getSelectedObject(id: string): Promise<void> {
+  const response = await ObjectsService.getObject(id);
+
+  objectsStore.selectedObject = response!;
 }
 
 export function toggleCreateObjectModal(isOpen?: boolean | React.MouseEvent): void {

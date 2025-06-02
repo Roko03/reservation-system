@@ -1,10 +1,10 @@
 import { proxy, useSnapshot } from 'valtio';
 
-import { ReservationModel } from '@/model/reservation.model';
+import { ObjectModel } from '@/model/object.model';
 
 interface ObjectsStore {
-  objects: ReservationModel[];
-  selectedObject?: ReservationModel;
+  objects: ObjectModel[];
+  selectedObject?: ObjectModel;
   totalCount: number;
   isLoading: boolean;
   createObjectModalOpen: boolean;

@@ -1,0 +1,51 @@
+@use '@/styles/settings/variables' as *;
+@use '@/styles/utils/rem-calc' as *;
+
+.root {
+  &.container {
+    position: relative;
+    padding: rem-calc(12);
+    margin-bottom: rem-calc(12);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .previewImage {
+      background-color: $black50;
+      border-radius: rem-calc(4);
+      width: rem-calc(72);
+      height: rem-calc(72);
+      object-fit: cover;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    .previewPDF {
+      background-color: $black50;
+      border-radius: rem-calc(4);
+      width: rem-calc(72);
+      height: rem-calc(72);
+      padding: rem-calc(16);
+    }
+
+    .name {
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
+
+    .size {
+      margin-top: rem-calc(4);
+      color: $black50;
+    }
+
+    .button {
+      position: absolute;
+      right: rem-calc(12);
+      color: $black100;
+    }
+  }
+}
