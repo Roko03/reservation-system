@@ -1,0 +1,32 @@
+@use '@/styles/settings/variables' as *;
+@use '@/styles/utils/rem-calc' as *;
+@use '@/styles/mixins/breakpoints' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: rem-calc(104);
+  border-radius: rem-calc(8);
+  border: rem-calc(2) dashed $black100;
+
+  &.active {
+    border: rem-calc(2) dashed $green100;
+  }
+
+  .icon {
+    width: rem-calc(56);
+    height: rem-calc(56);
+
+    @include media(0, 'md') {
+      width: rem-calc(36);
+      height: rem-calc(36);
+      padding: rem-calc(8);
+    }
+  }
+
+  label {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}

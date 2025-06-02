@@ -1,3 +1,6 @@
+import { Dayjs } from 'dayjs';
+
+import { UnavailablePeriod } from '@/model/unvailable.model';
 import { UserRoleName } from '@/model/user.model';
 
 export interface UpdateUserFormValues {
@@ -6,4 +9,22 @@ export interface UpdateUserFormValues {
   email: string;
   phoneNumber: string;
   role: UserRoleName;
+}
+
+export interface ObjectFormValues {
+  name: string;
+  location: string;
+  image?: string;
+  workTimeFrom: Dayjs | null;
+  workTimeTo: Dayjs | null;
+  unvailableDates?: UnavailablePeriod[];
+}
+
+export interface CreateObjectTimeStringFormValues {
+  name: string;
+  location: string;
+  image?: string;
+  workTimeFrom: string;
+  workTimeTo: string;
+  unvailableDates?: UnavailablePeriod[];
 }

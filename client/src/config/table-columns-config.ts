@@ -19,3 +19,16 @@ export const reservationTableColumns: TableColumn[] = [
   { id: 'date', label: 'Datum rezervacije', sortable: false },
   { id: 'status', label: 'Status', sortable: false },
 ];
+
+export const objectTableColumns: TableColumn[] = [
+  { id: 'number', label: 'Broj', sortable: false },
+  { id: 'name', label: 'Ime objekta', sortable: false },
+  { id: 'location', label: 'Lokacija', sortable: false },
+  { id: 'workTime', label: 'Radno vrijeme', sortable: false },
+];
+
+export const unavailablePeriodsTableColumns: TableColumn[] = [
+  { id: 'key', label: 'Broj', sortable: false },
+  { id: 'startDate', label: 'Datum od', sortable: false },
+  { id: 'endDate', label: 'Datum do', sortable: false },
+];

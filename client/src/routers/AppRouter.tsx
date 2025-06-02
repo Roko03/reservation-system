@@ -52,9 +52,8 @@ const AppRouter: React.FC = () => (
           }
         >
           <Route index element={<Admin />} />
-          <Route path="objects">
-            <Route index element={<Objects />} />
-            <Route path=":id" element={<Object />} />
+          <Route path="objects" element={<Objects />}>
+            <Route path=":id" />
           </Route>
           <Route path="reservations">
             <Route index element={<Reservations />} />

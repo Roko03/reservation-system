@@ -1,0 +1,21 @@
+@use '@/styles/settings/variables' as *;
+@use '@/styles/utils/rem-calc' as *;
+@use '@/styles/mixins/breakpoints' as *;
+
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: rem-calc(32);
+  border-radius: rem-calc(16);
+  background-color: $black50;
+  max-width: rem-calc(540);
+
+  @include media(0, 'md') {
+    left: rem-calc(20);
+    right: rem-calc(20);
+    transform: translateY(-50%);
+    padding: rem-calc(20);
+  }
+}
