@@ -1,0 +1,26 @@
+@use '@/styles/utils/rem-calc' as *;
+@use '@/styles/mixins/breakpoints' as *;
+
+.rbc-timeslot-group {
+  min-height: rem-calc(140);
+}
+
+.rbc-events-container {
+  display: block !important;
+}
+
+.rbc-event-label {
+  display: none !important;
+}
+
+.rbc-event {
+  position: relative !important;
+  left: 0 !important;
+  height: fit-content !important;
+  display: block !important;
+  width: 100% !important;
+  margin-bottom: rem-calc(4);
+  border-radius: rem-calc(4);
+  padding: rem-calc(2) rem-calc(4);
+  box-sizing: border-box;
+}
