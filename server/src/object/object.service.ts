@@ -49,6 +49,7 @@ export class ObjectService {
           id: true,
           name: true,
           location: true,
+          image: true,
           workTimeFrom: true,
           workTimeTo: true,
           unavailablePeriods: {
@@ -86,7 +87,17 @@ export class ObjectService {
   }
 
   async getObject(id: string) {
-    const object = await this.prisma.object.findUnique({ where: { id } });
+    const object = await this.prisma.object.findUnique({
+      where: { id },
+      include: {
+        unavailablePeriods: {
+          select: {
+            startDate: true,
+            endDate: true,
+          },
+        },
+      },
+    });
 
     if (!object) throw new NotFoundException('Objekt ne postoji');
 
