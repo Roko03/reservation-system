@@ -19,29 +19,19 @@ const Admin = () => {
     getInfo();
   }, []);
 
-  if (!info) {
-    return (
-      <Layout>
-        <Container maxWidth={false}>
-          <Typography>Nema podataka</Typography>
-        </Container>
-      </Layout>
-    );
-  }
-
   const infoItems: InfoItem[] = [
-    { label: 'Objects', value: info.numberOfObjects, icon: StadiumOutlined },
-    { label: 'Users', value: info.numberOfUsers, icon: Users },
-    { label: 'Reservations', value: info.numberOfReservations, icon: EventAvailable },
+    { label: 'Objects', value: info?.numberOfObjects || 0, icon: StadiumOutlined },
+    { label: 'Users', value: info?.numberOfUsers || 0, icon: Users },
+    { label: 'Reservations', value: info?.numberOfReservations || 0, icon: EventAvailable },
   ];
 
   return (
     <Layout>
       <Container maxWidth={false}>
-        <Typography>
+        <Typography component="p" variant="h1">
           Dobrodosli, {user?.firstname} {user?.lastName}
         </Typography>
-        <Stack direction="row" spacing={2} pt={3}>
+        <Stack direction="row" spacing={2} pt={4}>
           {infoItems.map(({ label, value, icon: Icon }) => (
             <Card key={label} sx={{ maxWidth: 200, flex: 1, backgroundColor: colors.green50 }}>
               <CardContent>
@@ -53,10 +43,10 @@ const Admin = () => {
                   color={colors.green300}
                 >
                   {Icon && <Icon size="24px" />}
-                  <Typography component="body" variant="h3" fontWeight={500}>
+                  <Typography component="p" variant="h3" fontWeight={500}>
                     {label}
                   </Typography>
-                  <Typography component="body" variant="h2" fontWeight={700}>
+                  <Typography component="p" variant="h2" fontWeight={700}>
                     {value}
                   </Typography>
                 </Stack>
