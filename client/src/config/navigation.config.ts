@@ -1,6 +1,8 @@
 import { ElementType } from 'react';
 
-import { Calendar, Home, Objects, Reservations, Users } from '@/components/SvgIcons/Navigation';
+import { CalendarMonthOutlined, Event } from '@mui/icons-material';
+
+import { Home, Objects, Users } from '@/components/SvgIcons/Navigation';
 import { UserRoleName } from '@/model/user.model';
 
 export interface NavigationLinkChild {
@@ -58,14 +60,14 @@ const navigation: NavigationLink[] = [
   {
     id: 'admin-reservations',
     path: '/admin/reservations',
-    icon: Reservations,
+    icon: Event,
     text: 'Reservations',
     accessLevel: [UserRoleName.ADMIN, UserRoleName.SUPERADMIN],
   },
   {
     id: 'admin-calendar',
     path: '/admin/calendar',
-    icon: Calendar,
+    icon: CalendarMonthOutlined,
     text: 'Calendar',
     accessLevel: [UserRoleName.ADMIN, UserRoleName.SUPERADMIN],
   },
