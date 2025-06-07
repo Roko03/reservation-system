@@ -18,6 +18,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
+import { MailerService } from 'src/mailer/mailer.service';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +26,7 @@ export class AuthService {
     private prisma: PrismaService,
     private jwtService: JwtService,
     private config: ConfigService,
+    private mailerService: MailerService,
   ) {}
 
   async checkLogin(req: Request): Promise<{ isLoggin: boolean }> {
@@ -57,7 +59,16 @@ export class AuthService {
         },
       });
 
-      return { token: token.tokenValue };
+      await this.mailerService.sendEmail(
+        user.email,
+        'Verifikacijski token',
+        token.tokenValue,
+      );
+
+      return {
+        message:
+          'Korisnik se uspjesno registrirao, verifikacijski kod je poslan na mail.',
+      };
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {

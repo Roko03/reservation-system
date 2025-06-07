@@ -9,6 +9,7 @@ import { MeModule } from './me/me.module';
 import { ObjectModule } from './object/object.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { InfoModule } from './info/info.module';
+import { MailerModule } from './mailer/mailer.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { InfoModule } from './info/info.module';
     ObjectModule,
     ReservationModule,
     InfoModule,
+    MailerModule,
   ],
   providers: [
     {
