@@ -13,7 +13,7 @@ import { UpdateRoleDto } from './dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Role } from '../common/enums/role.enum';
-import { GetCurrentUserId } from '../common/decorators';
+import { GetCurrentUserId, Public } from '../common/decorators';
 
 @Controller('user')
 export class UserController {
@@ -46,5 +46,11 @@ export class UserController {
   @UseGuards(RolesGuard)
   deleteUser(@Param('userId') userId: string) {
     return this.userService.deleteUser(userId);
+  }
+
+  @Get('/:userId')
+  @Public()
+  getUser(@Param('userId') userId: string, g) {
+    return this.userService.getUser(userId);
   }
 }

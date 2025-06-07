@@ -5,9 +5,9 @@ export enum ReservationStatus {
 }
 
 export const RESERVATION_STATUS_LABEL_MAP = {
-  [ReservationStatus.APPROVED]: 'Approved',
-  [ReservationStatus.PENDING]: 'Pending',
-  [ReservationStatus.REJECTED]: 'Rejected',
+  [ReservationStatus.APPROVED]: 'Prihvaceno',
+  [ReservationStatus.PENDING]: 'U tijeku',
+  [ReservationStatus.REJECTED]: 'Odbijena',
 } as const;
 
 export const RESERVATION_STATUS_ARRAY = [

@@ -20,15 +20,15 @@ const Admin = () => {
   }, []);
 
   const infoItems: InfoItem[] = [
-    { label: 'Objects', value: info?.numberOfObjects || 0, icon: StadiumOutlined },
-    { label: 'Users', value: info?.numberOfUsers || 0, icon: Users },
-    { label: 'Reservations', value: info?.numberOfReservations || 0, icon: EventAvailable },
+    { label: 'Objekata', value: info?.numberOfObjects || 0, icon: StadiumOutlined },
+    { label: 'Korisnika', value: info?.numberOfUsers || 0, icon: Users },
+    { label: 'Rezervacija', value: info?.numberOfReservations || 0, icon: EventAvailable },
   ];
 
   return (
     <Layout>
       <Container maxWidth={false}>
-        <Typography component="p" variant="h1">
+        <Typography component="p" variant="h1" pt={12}>
           Dobrodosli, {user?.firstname} {user?.lastName}
         </Typography>
         <Stack direction="row" spacing={2} pt={4}>

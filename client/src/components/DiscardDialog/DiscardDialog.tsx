@@ -18,9 +18,9 @@ const DiscardDialog: React.FC<DiscardDialogProps> = ({ isOpen, onClose, onDiscar
     <Modal
       open={isOpen}
       onClose={onClose}
-      title="Discard changes"
-      description="Are you sure you want to discard your changes?"
-      confirmBtnText="Discard"
+      title="Odbaci promjene"
+      description="Jesi li siguran da zelis odbaciti promjene?"
+      confirmBtnText="Odbaci"
       ConfirmBtnProps={{ fullWidth: true, color: 'error' }}
       onConfirm={handleConfirm}
       onCancel={onClose}

@@ -6,11 +6,17 @@ import Toast from '@/components/Toast';
 import AppRouter from '@/routers/AppRouter';
 import theme from '@/styles/themes';
 
-const App: React.FC = () => (
-  <ThemeProvider theme={theme}>
-    <AppRouter />
-    <Toast />
-  </ThemeProvider>
-);
+import useAuth from './utils/hooks/useAuth';
+
+const App: React.FC = () => {
+  useAuth();
+
+  return (
+    <ThemeProvider theme={theme}>
+      <AppRouter />
+      <Toast />
+    </ThemeProvider>
+  );
+};
 
 export default App;

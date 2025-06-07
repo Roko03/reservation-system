@@ -1,8 +1,14 @@
+@use '@/styles/settings/variables' as *;
 @use '@/styles/utils/rem-calc' as *;
 @use '@/styles/mixins/breakpoints' as *;
 
 .container {
+  top: 0;
+  left: 0;
   width: 100%;
+  background-color: $black50;
+  width: 100%;
+  border-bottom: rem-calc(1) solid $black400;
 
   .toolbar {
     justify-content: space-between;

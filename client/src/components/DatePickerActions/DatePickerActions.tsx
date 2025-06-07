@@ -1,20 +1,27 @@
 import React from 'react';
 
 import { Button, DialogActions } from '@mui/material';
-import { PickersActionBarProps } from '@mui/x-date-pickers';
+import { usePickerActionsContext } from '@mui/x-date-pickers';
+import { PickersActionBarProps } from '@mui/x-date-pickers/PickersActionBar';
 
-interface CustomPickersActionBarProps extends PickersActionBarProps {
-  onAccept?: () => void;
-  onCancel?: () => void;
-}
+const DatePickerActions: React.FC<PickersActionBarProps> = ({ actions, className }) => {
+  const { acceptValueChanges, cancelValueChanges, clearValue } = usePickerActionsContext();
 
-const DatePickerActions: React.FC<CustomPickersActionBarProps> = ({ onAccept, onCancel, className }) => (
-  <DialogActions className={className}>
-    <Button variant="outlined" onClick={onCancel}>
-      Cancel
-    </Button>
-    <Button onClick={onAccept}>OK</Button>
-  </DialogActions>
-);
+  return (
+    <DialogActions className={className}>
+      {actions?.includes('clear') && (
+        <Button variant="text" onClick={clearValue}>
+          Izbrisi
+        </Button>
+      )}
+      {actions?.includes('cancel') && (
+        <Button variant="outlined" onClick={acceptValueChanges}>
+          Ponisti
+        </Button>
+      )}
+      {actions?.includes('accept') && <Button onClick={cancelValueChanges}>OK</Button>}
+    </DialogActions>
+  );
+};
 
 export default DatePickerActions;

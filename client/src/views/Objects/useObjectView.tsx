@@ -75,14 +75,14 @@ const useObjectView = (): useObjectViewPayload => {
         <ListItemIcon>
           <Edit />
         </ListItemIcon>
-        <Typography variant="body2">Edit object</Typography>
+        <Typography variant="body2">Uredi objekt</Typography>
       </MenuItem>
       <MenuItem data-index={index} onClick={handleDeleteClick}>
         <ListItemIcon>
           <Delete fill={colors.red100} />
         </ListItemIcon>
         <Typography variant="body2" color={colors.red100}>
-          Delete object
+          Izbrisi objekt
         </Typography>
       </MenuItem>
     </MenuList>

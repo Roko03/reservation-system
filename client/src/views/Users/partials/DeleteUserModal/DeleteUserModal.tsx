@@ -32,7 +32,7 @@ const DeleteUserModal = ({ isOpen, onClose }: DeleteUserModalProps) => {
 
     showToast({
       status: payload ? 'success' : 'error',
-      text: payload ? 'Delete user successful' : message || 'Delete user failed',
+      text: payload ? 'Korisnik obrisan' : message || 'Doslo je do pogreske prilikom brisanja korisnika',
     });
 
     onClose();
@@ -43,9 +43,9 @@ const DeleteUserModal = ({ isOpen, onClose }: DeleteUserModalProps) => {
     <Modal
       open={isOpen}
       onClose={onClose}
-      title="Delete customer"
-      description={`Are you sure you want to delete ${selectedUser?.firstname} ${selectedUser?.lastName}?`}
-      confirmBtnText="Delete"
+      title="Izbrisi korisnika"
+      description={`Jesi li siguran da zelis izbrisati ${selectedUser?.firstname} ${selectedUser?.lastName}?`}
+      confirmBtnText="Izbrisi"
       ConfirmBtnProps={{ fullWidth: true, color: 'error' }}
       onConfirm={handleConfirm}
       onCancel={onClose}

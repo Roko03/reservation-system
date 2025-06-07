@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Avatar, Divider, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 
 import { UserRoleName } from '@/model/user.model';
+import useLogout from '@/utils/hooks/useLogout';
 import { roleGuard } from '@/utils/static/roleGuard';
 import { useAuthStore } from '@/valtio/auth/auth.store';
 
@@ -11,6 +12,7 @@ import styles from './ProfileDropdown.module.scss';
 
 const ProfileDropdown = () => {
   const [profileMenu, setProfileMenu] = useState<null | HTMLElement>(null);
+  const handleLogout = useLogout();
   const navigate = useNavigate();
   const { user } = useAuthStore();
 
@@ -39,7 +41,13 @@ const ProfileDropdown = () => {
         aria-haspopup="true"
         aria-expanded={profileMenu ? 'true' : undefined}
       >
-        <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+        {user.profileImage ? (
+          <Avatar src={user.profileImage} alt="User image avatar" sx={{ width: 32, height: 32 }}>
+            M
+          </Avatar>
+        ) : (
+          <Avatar sx={{ width: 32, height: 32 }}>{user.firstname[0].toUpperCase()}</Avatar>
+        )}
       </IconButton>
       <Menu
         anchorEl={profileMenu}
@@ -63,7 +71,7 @@ const ProfileDropdown = () => {
             <Divider />
           </>
         )}
-        <MenuItem className={styles.menuItem}>
+        <MenuItem className={styles.menuItem} onClick={handleLogout}>
           <Typography variant="body1">Odjavi se</Typography>
         </MenuItem>
       </Menu>

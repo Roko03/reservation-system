@@ -35,7 +35,7 @@ const ApproveReservationaModal = ({ isOpen, onClose }: ApproveReservationaModalP
 
     showToast({
       status: payload ? 'success' : 'error',
-      text: payload ? 'Approve reservation successful' : message || 'Approve reservation failed',
+      text: payload ? 'Rezervacija prihvacena' : message || 'Greska prilikom prihvacanja rezervacije',
     });
 
     onClose();
@@ -46,9 +46,9 @@ const ApproveReservationaModal = ({ isOpen, onClose }: ApproveReservationaModalP
     <Modal
       open={isOpen}
       onClose={onClose}
-      title="Approve reservation"
-      description={`Are you sure you want to approve reservation by ${selectedReservation?.user.email} to ${selectedReservation?.object.name} at ${DateTime.formatHR(dayjs(selectedReservation?.date))} - ${formatTime(selectedReservation?.time)} ?`}
-      confirmBtnText="Approve"
+      title="Prihvati rezervaciju"
+      description={`Jesi li siguran da zelis prihvatiti rezervaciju od ${selectedReservation?.user.email} za ${selectedReservation?.object.name} - ${DateTime.formatHR(dayjs(selectedReservation?.date))} - ${formatTime(selectedReservation?.time)} ?`}
+      confirmBtnText="Prihvati"
       ConfirmBtnProps={{ fullWidth: true, color: 'error' }}
       onConfirm={handleConfirm}
       onCancel={onClose}

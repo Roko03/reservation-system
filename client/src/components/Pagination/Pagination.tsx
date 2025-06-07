@@ -25,7 +25,7 @@ const Pagination: React.FC<PaginationProps> = ({ page, onChange, count }) => {
   return (
     <Grid container alignItems="center" justifyContent="space-between" mt={2}>
       <Typography variant="body2">
-        Page {page} of {count}
+        Stranica {page}/{count}
       </Typography>
       <MuiPagination
         shape="rounded"

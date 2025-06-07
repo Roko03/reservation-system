@@ -64,7 +64,7 @@ const UpdateUserModal = ({ isOpen, onClose }: UpdateUserModalProps) => {
 
     showToast({
       status: payload ? 'success' : 'error',
-      text: payload ? 'Update user successful' : message || 'Update user failed',
+      text: payload ? 'Uredi korisnika' : message || 'Prilikom uredivanja korisnika doslo je do greske',
     });
 
     if (payload) {
@@ -91,18 +91,15 @@ const UpdateUserModal = ({ isOpen, onClose }: UpdateUserModalProps) => {
       fullScreen={isMobile}
       onClose={onClose}
       title={`${selectedUser?.firstname} ${selectedUser?.lastName}`}
-      cancelBtnText="Cancel"
+      cancelBtnText="Ponisit"
       onCancel={onClose}
-      confirmBtnText="Save changes"
+      confirmBtnText="Sacuvaj promjene"
       ConfirmBtnProps={{
         form: UPDATE_USER_FORM,
         type: 'submit',
       }}
     >
       <Form defaultValues={initialValues} onSubmit={handleSubmit} id={UPDATE_USER_FORM}>
-        <Typography variant="body1" mb={2}>
-          General info
-        </Typography>
         <Stack direction={isMobile ? 'column' : 'row'} spacing={2} mb={2}>
           <FormInput name="firstname" formLabel="Ime" placeholder="Ime" disabled />
           <FormInput name="lastName" formLabel="Prezime" placeholder="Prezime" disabled />

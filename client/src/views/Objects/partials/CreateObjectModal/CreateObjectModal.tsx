@@ -61,7 +61,7 @@ const CreateObjectModal = ({ isOpen, onClose }: CreateObjectModalProps) => {
 
     showToast({
       status: payload ? 'success' : 'error',
-      text: payload ? 'Create object successful' : message || 'Creat object failed',
+      text: payload ? 'Objekt kreiran' : message || 'Prilikom kreiranja objekta doslo je do greske',
     });
 
     if (payload) {
@@ -79,9 +79,9 @@ const CreateObjectModal = ({ isOpen, onClose }: CreateObjectModalProps) => {
       open={isOpen}
       fullScreen={isMobile}
       onClose={isFormDirty ? toggleDiscard : onClose}
-      title="New object"
+      title="Novi objekt"
       hideCancelButton
-      confirmBtnText="Create"
+      confirmBtnText="Kreiraj"
       ConfirmBtnProps={{
         form: CREATE_OBJECT_FORM,
         type: 'submit',
@@ -101,13 +101,33 @@ const CreateObjectModal = ({ isOpen, onClose }: CreateObjectModalProps) => {
                 <FormInput
                   name="workTimeFrom"
                   renderInput={({ field }) => (
-                    <TimePicker label="Pocetak rada" value={field.value} onChange={field.onChange} />
+                    <TimePicker
+                      slotProps={{
+                        textField: {
+                          placeholder: 'Pocetak rada',
+                          variant: 'outlined',
+                          InputLabelProps: { shrink: false },
+                        },
+                      }}
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
                   )}
                 />
                 <FormInput
                   name="workTimeTo"
                   renderInput={({ field }) => (
-                    <TimePicker label="Zavrsetak rada" value={field.value} onChange={field.onChange} />
+                    <TimePicker
+                      slotProps={{
+                        textField: {
+                          placeholder: 'Zavrsetak rada',
+                          variant: 'outlined',
+                          InputLabelProps: { shrink: false },
+                        },
+                      }}
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
                   )}
                 />
               </Stack>

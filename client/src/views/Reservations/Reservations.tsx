@@ -107,6 +107,7 @@ const Reservations = () => {
               alignItems={{ md: 'center' }}
               mb={1.5}
               gap={1.5}
+              pt={12}
             >
               <Stack
                 direction={isBelowLg ? 'column' : 'row'}

@@ -35,7 +35,7 @@ const RejectReservationaModal = ({ isOpen, onClose }: RejectReservationaModalPro
 
     showToast({
       status: payload ? 'success' : 'error',
-      text: payload ? 'Reject reservation successful' : message || 'Reject reservation failed',
+      text: payload ? 'Rezervacija odbijena' : message || 'Greska prilikom odbijanja rezervacije',
     });
 
     onClose();
@@ -46,9 +46,9 @@ const RejectReservationaModal = ({ isOpen, onClose }: RejectReservationaModalPro
     <Modal
       open={isOpen}
       onClose={onClose}
-      title="Reject reservation"
-      description={`Are you sure you want to reject reservation by ${selectedReservation?.user.email} to ${selectedReservation?.object.name} at ${DateTime.formatHR(dayjs(selectedReservation?.date))} - ${formatTime(selectedReservation?.time)} ?`}
-      confirmBtnText="Reject"
+      title="Odbij rezervaciju"
+      description={`Jesi li siguran da zelis odbiti rezervaciju od ${selectedReservation?.user.email} za ${selectedReservation?.object.name} - ${DateTime.formatHR(dayjs(selectedReservation?.date))} - ${formatTime(selectedReservation?.time)} ?`}
+      confirmBtnText="Odbij"
       ConfirmBtnProps={{ fullWidth: true, color: 'error' }}
       onConfirm={handleConfirm}
       onCancel={onClose}

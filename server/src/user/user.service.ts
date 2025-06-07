@@ -59,6 +59,14 @@ export class UserService {
     };
   }
 
+  async getUser(userId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user) throw new NotFoundException('Korisnik ne postoji');
+
+    return user;
+  }
+
   async editUser(userId: string, dto: UpdateRoleDto) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
 

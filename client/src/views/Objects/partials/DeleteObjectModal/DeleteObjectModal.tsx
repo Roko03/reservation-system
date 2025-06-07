@@ -32,7 +32,7 @@ const DeleteObjectModal = ({ isOpen, onClose }: DeleteObjectModalProps) => {
 
     showToast({
       status: payload ? 'success' : 'error',
-      text: payload ? 'Delete object successful' : message || 'Delete object failed',
+      text: payload ? 'Objekt izbrisan' : message || 'Prilikom brisanja korisnika doslo je do pogreske',
     });
 
     onClose();
@@ -43,8 +43,8 @@ const DeleteObjectModal = ({ isOpen, onClose }: DeleteObjectModalProps) => {
     <Modal
       open={isOpen}
       onClose={onClose}
-      title="Delete object"
-      description={`Are you sure you want to delete ${selectedObject?.name}?`}
+      title="Izbrisi objekt"
+      description={`Jesi li siguran da zelis izbrisati ${selectedObject?.name}?`}
       confirmBtnText="Delete"
       ConfirmBtnProps={{ fullWidth: true, color: 'error' }}
       onConfirm={handleConfirm}

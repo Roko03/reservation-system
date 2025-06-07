@@ -47,7 +47,9 @@ export const authHeaders = () => {
   const token = localStorage.getItem(AuthKeys.TOKEN);
 
   if (token) {
-    headers.append('Authorization', `Bearer ${token}`);
+    const { accessToken } = JSON.parse(token);
+
+    headers.append('Authorization', `Bearer ${accessToken}`);
   }
 
   return headers;

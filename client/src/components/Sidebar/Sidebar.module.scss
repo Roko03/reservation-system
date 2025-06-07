@@ -5,6 +5,8 @@
 .container {
   width: rem-calc(360);
   border-right: rem-calc(1) solid $black400;
+  background-color: $black50;
+  z-index: 1300;
 
   @include media(0, 'md') {
     display: none;

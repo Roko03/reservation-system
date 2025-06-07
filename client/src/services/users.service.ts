@@ -39,6 +39,22 @@ export default class UsersService {
     }
   }
 
+  public static async getUserByToken(token: string): Promise<UserModel | null> {
+    try {
+      const { id } = JSON.parse(token);
+      const response = await fetch(`${import.meta.env.VITE_WS_API_URL}/user/${id}`, { headers: authHeaders() });
+      const user: UserModel = await response.json();
+
+      if (!user) {
+        return null;
+      }
+
+      return user;
+    } catch {
+      return null;
+    }
+  }
+
   public static async updateUser(
     id: string,
     payload: Pick<UpdateUserFormValues, 'role'>

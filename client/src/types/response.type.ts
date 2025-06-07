@@ -1,10 +1,3 @@
-// export interface ApiResponse<T = null> {
-//   errors: Record<string, string[]>;
-//   message: string;
-//   payload: T;
-//   status: number;
-// }
-
 export type PaginatedResponse<T> = {
   entities: T[];
   totalCount: number;
@@ -13,8 +6,6 @@ export type PaginatedResponse<T> = {
     pageSize: number;
   };
 };
-
-// export type PaginatedApiResponse<T> = ApiResponse<PaginatedResponse<T>>;
 
 export type PayloadResponse<T> = {
   payload: T;
@@ -25,8 +16,4 @@ export type LoginResponse = {
   token: string;
   refreshToken: string;
   userId: number;
-};
-
-export type TenantFeaturesResponse<T> = {
-  features: T[];
 };

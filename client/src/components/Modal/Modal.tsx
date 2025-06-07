@@ -40,11 +40,11 @@ const Modal = ({
   onClose,
   description,
   onConfirm,
-  confirmBtnText = 'Confirm',
+  confirmBtnText = 'Potvrdi',
   ConfirmBtnProps,
   hideConfirmButton = false,
   onCancel,
-  cancelBtnText = 'Cancel',
+  cancelBtnText = 'Ponisti',
   CancelBtnProps,
   hideCancelButton = false,
   titleActions,
@@ -67,7 +67,7 @@ const Modal = ({
       <Stack>
         <Typography variant="h2">{title}</Typography>
         {description && (
-          <Typography variant="body1" color={colors.black950}>
+          <Typography variant="body1" color={colors.black700} pt={4}>
             {description}
           </Typography>
         )}

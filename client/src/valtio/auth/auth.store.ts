@@ -1,7 +1,7 @@
 import { proxy, useSnapshot } from 'valtio';
 
 import { AuthKeys } from '@/config/constants.config';
-import { UserModel, UserRoleName } from '@/model/user.model';
+import { UserModel } from '@/model/user.model';
 
 interface AuthStore {
   user: UserModel | null;
@@ -10,15 +10,7 @@ interface AuthStore {
 }
 
 export const authStore = proxy<AuthStore>({
-  user: {
-    id: '123',
-    firstname: 'roko',
-    lastName: 'ponjarac',
-    email: 'roko@gmail.com',
-    phoneNumber: '',
-    profileImage: '/',
-    role: UserRoleName.ADMIN,
-  },
+  user: null,
   authenticating: false,
   token: localStorage.getItem(AuthKeys.TOKEN),
 });

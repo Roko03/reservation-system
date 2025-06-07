@@ -73,7 +73,7 @@ const UpdateObjectModal = ({ isOpen, onClose }: UpdateObjectModalProps) => {
 
     showToast({
       status: payload ? 'success' : 'error',
-      text: payload ? 'Update object successful' : message || 'Update object failed',
+      text: payload ? 'Objekt ureden' : message || 'Prilikom uredivanja objekta doslo je do greske',
     });
 
     if (payload) {
@@ -90,11 +90,11 @@ const UpdateObjectModal = ({ isOpen, onClose }: UpdateObjectModalProps) => {
     <Modal
       open={isOpen}
       fullScreen={isMobile}
-      title="Edit object"
+      title="Uredi objekt"
       onClose={onClose}
-      cancelBtnText="Cancel"
+      cancelBtnText="Odbaci"
       onCancel={onClose}
-      confirmBtnText="Save changes"
+      confirmBtnText="Sacuvaj promjene"
       ConfirmBtnProps={{
         form: UPDATE_OBJECT_FORM,
         type: 'submit',
@@ -109,13 +109,33 @@ const UpdateObjectModal = ({ isOpen, onClose }: UpdateObjectModalProps) => {
           <FormInput
             name="workTimeFrom"
             renderInput={({ field }) => (
-              <TimePicker label="Pocetak rada" value={field.value} onChange={field.onChange} />
+              <TimePicker
+                slotProps={{
+                  textField: {
+                    placeholder: 'Pocetak rada',
+                    variant: 'outlined',
+                    InputLabelProps: { shrink: false },
+                  },
+                }}
+                value={field.value}
+                onChange={field.onChange}
+              />
             )}
           />
           <FormInput
             name="workTimeTo"
             renderInput={({ field }) => (
-              <TimePicker label="Zavrsetak rada" value={field.value} onChange={field.onChange} />
+              <TimePicker
+                slotProps={{
+                  textField: {
+                    placeholder: 'Zavrsetak rada',
+                    variant: 'outlined',
+                    InputLabelProps: { shrink: false },
+                  },
+                }}
+                value={field.value}
+                onChange={field.onChange}
+              />
             )}
           />
         </Stack>

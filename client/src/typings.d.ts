@@ -1,4 +1,9 @@
 import { CSSProperties } from '@mui/material/styles/createTypography';
+import * as valtio from 'valtio';
+
+declare module 'valtio' {
+  function useSnapshot<T extends object>(p: T): T;
+}
 
 declare module '@mui/material/styles' {
   interface TypographyVariants {
@@ -24,5 +29,11 @@ declare module '@mui/material/Typography' {
     subtitle2: false;
     body3: true;
     hero: true;
+  }
+}
+
+declare module '@mui/material/SvgIcon' {
+  interface SvgIconPropsSizeOverrides {
+    extraSmall: true;
   }
 }

@@ -61,13 +61,13 @@ const useReservationView = (): useReservationViewPayload => {
         <ListItemIcon>
           <Edit />
         </ListItemIcon>
-        <Typography variant="body2">Approve</Typography>
+        <Typography variant="body2">Potvrdi</Typography>
       </MenuItem>
       <MenuItem data-index={index} onClick={handleRejectClick} disabled={!isReservationEditable(index)}>
         <ListItemIcon>
           <Delete />
         </ListItemIcon>
-        <Typography variant="body2">Reject</Typography>
+        <Typography variant="body2">Odbij</Typography>
       </MenuItem>
     </MenuList>
   );

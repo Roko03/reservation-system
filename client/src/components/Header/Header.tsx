@@ -23,7 +23,7 @@ const Header = () => {
 
   return (
     <>
-      <AppBar position="relative" className={styles.container} color="transparent" elevation={0}>
+      <AppBar position="fixed" className={styles.container} elevation={0}>
         <Toolbar className={cx(styles.toolbar, { [styles.adminToolbar]: isAdmin })}>
           <IconButton className={styles.menuButton} aria-label="Open navigation drawer" onClick={toggleNavigation}>
             <Menu />

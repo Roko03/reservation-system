@@ -41,7 +41,7 @@ const Table = ({
   sortDirection,
   sortBy,
   onSort,
-  noResultsMessage = 'No records were found.',
+  noResultsMessage = 'Nema sadrzaja',
 }: TableProps) => {
   const noResults = !rows.length && !showSkeleton;
 

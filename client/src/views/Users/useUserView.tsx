@@ -57,18 +57,18 @@ const useUserView = (): useUserViewPayload => {
 
   const renderRowActions = (index: number): JSX.Element | false => (
     <MenuList>
-      <MenuItem data-index={index} onClick={handleUpdateClick} disabled={isSuperadmin!}>
+      <MenuItem data-index={index} onClick={handleUpdateClick} disabled={!isSuperadmin!}>
         <ListItemIcon>
           <Edit />
         </ListItemIcon>
-        <Typography variant="body2">Edit user</Typography>
+        <Typography variant="body2">Uredi korisnika</Typography>
       </MenuItem>
       <MenuItem data-index={index} onClick={handleDeleteClick}>
         <ListItemIcon>
           <Delete fill={colors.red100} />
         </ListItemIcon>
         <Typography variant="body2" color={colors.red100}>
-          Delete user
+          Izbrisi korisnika
         </Typography>
       </MenuItem>
     </MenuList>

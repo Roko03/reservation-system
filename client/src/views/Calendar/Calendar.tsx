@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Calendar as BigCalendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-import { Container } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 
@@ -66,21 +66,23 @@ const Calendar = () => {
   return (
     <Layout>
       <Container maxWidth={false}>
-        <BigCalendar
-          localizer={djLocalizer}
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          views={[Views.WEEK]}
-          defaultView={Views.WEEK}
-          aria-label="Reservation Calendar"
-          popup
-          onNavigate={handleNavigate}
-          min={dayjs().hour(8).minute(0).toDate()}
-          components={{
-            event: EventComponent,
-          }}
-        />
+        <Box pt={12}>
+          <BigCalendar
+            localizer={djLocalizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            views={[Views.WEEK]}
+            defaultView={Views.WEEK}
+            aria-label="Reservation Calendar"
+            popup
+            onNavigate={handleNavigate}
+            min={dayjs().hour(8).minute(0).toDate()}
+            components={{
+              event: EventComponent,
+            }}
+          />
+        </Box>
       </Container>
     </Layout>
   );

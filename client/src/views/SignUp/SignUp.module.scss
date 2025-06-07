@@ -1,0 +1,11 @@
+@use '@/styles/settings/variables' as *;
+@use '@/styles/utils/rem-calc' as *;
+@use '@/styles/mixins/breakpoints' as *;
+
+.container {
+  .form {
+    width: 100%;
+    max-width: rem-calc(550);
+    margin: auto;
+  }
+}

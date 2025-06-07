@@ -65,10 +65,11 @@ const Objects = () => {
               alignItems={{ md: 'center' }}
               mb={1.5}
               gap={1.5}
+              pt={12}
             >
-              <Search placeholder="Search" onChange={handleSearch} value={searchString} />
+              <Search placeholder="Pretrazi" onChange={handleSearch} value={searchString} />
               <Button variant="contained" size="large" onClick={toggleCreateObjectModal}>
-                Create
+                Kreiraj objekt
               </Button>
             </Stack>
             <Table
