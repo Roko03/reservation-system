@@ -14,7 +14,6 @@ const Login = lazy(() => import('@/views/Login'));
 const Admin = lazy(() => import('@/views/Admin'));
 const Calendar = lazy(() => import('@/views/Calendar'));
 const MyReservations = lazy(() => import('@/views/MyReservations'));
-const Object = lazy(() => import('@/views/Object'));
 const Objects = lazy(() => import('@/views/Objects'));
 const Profile = lazy(() => import('@/views/Profile'));
 const Reservations = lazy(() => import('@/views/Reservations'));
@@ -28,6 +27,9 @@ const AppRouter: React.FC = () => (
         <Route path="/login" element={<AppRoute variant="anonymous" component={<Login />} />} />
         <Route path="/signup" element={<AppRoute variant="anonymous" component={<SignUp />} />} />
         <Route path="/verify/:id" element={<AppRoute variant="anonymous" component={<Verify />} />} />
+        <Route path="objects">
+          <Route index element={<Objects />} />
+        </Route>
         <Route
           path="profile"
           element={<AppRoute variant="protected" accessLevel={[UserRoleName.USER]} component={<Profile />} />}
@@ -36,13 +38,6 @@ const AppRouter: React.FC = () => (
           path="my-reservations"
           element={<AppRoute variant="protected" accessLevel={[UserRoleName.USER]} component={<MyReservations />} />}
         />
-        <Route
-          path="objects"
-          element={<AppRoute variant="protected" accessLevel={[UserRoleName.USER]} component={<ProtectedLayout />} />}
-        >
-          <Route index element={<Objects />} />
-          <Route path=":id" element={<Object />} />
-        </Route>
         <Route
           path="admin"
           element={

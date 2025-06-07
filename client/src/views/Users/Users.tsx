@@ -45,7 +45,7 @@ const Users = () => {
     <>
       <UpdateUserModal isOpen={updateUserModalOpen} onClose={toggleUpdateUserModal} />
       <DeleteUserModal isOpen={deleteUserModalOpen} onClose={toggleDeleteUserModal} />
-      <Layout>
+      <Layout isAdmin>
         <Container maxWidth={false}>
           <Paper elevation={0}>
             <Stack

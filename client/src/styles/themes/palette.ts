@@ -25,6 +25,7 @@ const palette: ThemeOptions['palette'] = {
   },
   info: {
     main: colors.blue100,
+    contrastText: colors.blue200,
   },
 };
 

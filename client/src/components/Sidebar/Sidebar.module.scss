@@ -3,6 +3,7 @@
 @use '@/styles/mixins/breakpoints' as *;
 
 .container {
+  position: sticky;
   width: rem-calc(360);
   border-right: rem-calc(1) solid $black400;
   background-color: $black50;

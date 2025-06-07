@@ -1,0 +1,16 @@
+@use '@/styles/settings/variables' as *;
+@use '@/styles/utils/rem-calc' as *;
+@use '@/styles/mixins/breakpoints' as *;
+
+.container {
+  background-color: $green200;
+  border-top-right-radius: rem-calc(32);
+  border-top-left-radius: rem-calc(32);
+  height: 100%;
+  padding-block: rem-calc(48 24);
+
+  .divider {
+    margin-top: rem-calc(48);
+    border-color: $black50;
+  }
+}

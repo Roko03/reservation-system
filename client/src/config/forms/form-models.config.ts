@@ -17,3 +17,8 @@ export interface SignUpFormValues {
   repassword: string;
   phoneNumber: string;
 }
+
+export interface ContactFormValues {
+  email: string;
+  message: string;
+}

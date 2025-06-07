@@ -15,18 +15,21 @@ interface PaginationProps {
   page: number;
   onChange: (page: number) => void;
   count: number;
+  hideText?: boolean;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ page, onChange, count }) => {
+const Pagination: React.FC<PaginationProps> = ({ page, onChange, count, hideText = false }) => {
   const handlePageChange = (_: React.ChangeEvent<unknown>, selectedPage: number) => {
     onChange(selectedPage);
   };
 
   return (
     <Grid container alignItems="center" justifyContent="space-between" mt={2}>
-      <Typography variant="body2">
-        Stranica {page}/{count}
-      </Typography>
+      {!hideText && (
+        <Typography variant="body2">
+          Stranica {page}/{count}
+        </Typography>
+      )}
       <MuiPagination
         shape="rounded"
         count={count}

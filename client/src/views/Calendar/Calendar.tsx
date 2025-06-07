@@ -64,7 +64,7 @@ const Calendar = () => {
   }, [currentDate, pageNumber]);
 
   return (
-    <Layout>
+    <Layout isAdmin>
       <Container maxWidth={false}>
         <Box pt={12}>
           <BigCalendar

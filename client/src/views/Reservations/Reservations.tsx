@@ -98,7 +98,7 @@ const Reservations = () => {
     <>
       <ApproveReservationaModal isOpen={approveReservationModalOpen} onClose={toggleApproveReservationModal} />
       <RejectReservationaModal isOpen={rejectReservationModalOpen} onClose={toggleRejectReservationModal} />
-      <Layout>
+      <Layout isAdmin>
         <Container maxWidth={false}>
           <Paper elevation={0}>
             <Stack

@@ -2,36 +2,47 @@
 @use '@/styles/utils/rem-calc' as *;
 @use '@/styles/mixins/breakpoints' as *;
 
-.container {
-  top: 0;
-  left: 0;
-  background-color: $black50;
-  width: 100%;
-  border-bottom: rem-calc(1) solid $black400;
+.root {
+  &.container {
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: transparent;
 
-  .toolbar {
-    justify-content: space-between;
+    .toolbar {
+      justify-content: space-between;
 
-    @include media('md') {
-      .menuButton {
-        display: none;
+      @include media('md') {
+        .menuButton {
+          display: none;
+        }
+      }
+    }
+
+    .adminToolbar {
+      @include media('md') {
+        justify-content: flex-end;
       }
     }
   }
 
-  .adminToolbar {
+  &.drawer {
     @include media('md') {
-      justify-content: flex-end;
+      display: none;
+    }
+
+    .paper {
+      width: 100%;
     }
   }
-}
 
-.drawer {
-  @include media('md') {
-    display: none;
+  &.colored {
+    background-color: $black50;
+    border-bottom: rem-calc(1) solid $black400;
   }
 
-  .paper {
-    width: 100%;
+  &.adminContainer {
+    background-color: $black50;
+    border-bottom: rem-calc(1) solid $black400;
   }
 }

@@ -10,6 +10,11 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+  }
+}
+
+.adminContainer {
+  .main {
     overflow-y: scroll;
     max-height: 100vh;
     padding-bottom: rem-calc(24);

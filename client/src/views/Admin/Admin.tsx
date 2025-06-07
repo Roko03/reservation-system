@@ -26,7 +26,7 @@ const Admin = () => {
   ];
 
   return (
-    <Layout>
+    <Layout isAdmin>
       <Container maxWidth={false}>
         <Typography component="p" variant="h1" pt={12}>
           Dobrodosli, {user?.firstname} {user?.lastName}

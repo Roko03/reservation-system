@@ -1,0 +1,23 @@
+@use '@/styles/settings/variables' as *;
+@use '@/styles/utils/rem-calc' as *;
+@use '@/styles/mixins/breakpoints' as *;
+
+.root {
+  &.container {
+    position: relative;
+    background-color: #dcf1de;
+    padding-top: rem-calc(80);
+    min-height: rem-calc(400);
+    padding-inline: 0;
+
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      color: $black950;
+      height: fit-content;
+      width: 100%;
+    }
+  }
+}

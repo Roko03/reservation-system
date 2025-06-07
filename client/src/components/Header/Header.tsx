@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import { Menu } from '@mui/icons-material';
-import { AppBar, Drawer, IconButton, Stack, Toolbar, Typography } from '@mui/material';
+import { AppBar, Drawer, IconButton, Stack, Toolbar, Typography, useScrollTrigger } from '@mui/material';
 import cx from 'clsx';
 
 import NavigationMobile from '@/components/Navigation/NavigationMobile';
@@ -18,12 +18,23 @@ import styles from './Header.module.scss';
 const Header = () => {
   const [navigationOpen, toggleNavigation] = useToggleState();
   const { user } = useAuthStore();
+  const scrollTrigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 100,
+  });
 
   const isAdmin = user && roleGuard(user.role, [UserRoleName.ADMIN, UserRoleName.SUPERADMIN]);
 
+  const isColored = !isAdmin && scrollTrigger;
+
   return (
     <>
-      <AppBar position="fixed" className={styles.container} elevation={0}>
+      <AppBar
+        position="fixed"
+        classes={{ root: styles.root }}
+        className={cx(styles.container, { [styles.adminContainer]: isAdmin }, { [styles.colored]: isColored })}
+        elevation={0}
+      >
         <Toolbar className={cx(styles.toolbar, { [styles.adminToolbar]: isAdmin })}>
           <IconButton className={styles.menuButton} aria-label="Open navigation drawer" onClick={toggleNavigation}>
             <Menu />
