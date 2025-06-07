@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto, SignInDto } from './dto';
-import { AToken, ATokenOnly, ATokenWithUse } from './types';
+import { ATokenOnly, ATokenWithUse } from './types';
 import { GetCurrentUserId, Public } from '../common/decorators';
 import { Request, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
