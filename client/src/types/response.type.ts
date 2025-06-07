@@ -19,5 +19,11 @@ export type LoginResponse = {
 };
 
 export type RegisterResponse = {
-  token: string;
+  message: string;
+};
+
+export type VerifyResponse = {
+  message: string;
+  error: string;
+  statusCode: number;
 };

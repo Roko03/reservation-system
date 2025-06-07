@@ -1,3 +1,5 @@
+import { UseFormReturn } from 'react-hook-form';
+
 import { Button, Container, IconButton, InputAdornment, Stack } from '@mui/material';
 
 import Form from '@/components/Forms/Form';
@@ -24,7 +26,7 @@ const defaultValues: SignUpFormValues = {
 const SignUp = () => {
   const [passwordVisibility, togglePasswordVisibility] = useToggleState();
 
-  const handleRegister = async (formValues: SignUpFormValues) => {
+  const handleRegister = async (formValues: SignUpFormValues, methods: UseFormReturn<SignUpFormValues>) => {
     const { payload, message } = await AuthService.register(formValues);
 
     showToast({
@@ -33,10 +35,17 @@ const SignUp = () => {
         ? 'Registracija uspjesna, verifikacijski kod je poslan na mail'
         : message || 'Registracija nije uspjesna',
     });
+
+    if (payload) {
+      methods.reset(defaultValues);
+    }
   };
 
-  const handleSubmit = async (formValues: SignUpFormValues): Promise<void> => {
-    handleRegister(formValues);
+  const handleSubmit = async (
+    formValues: SignUpFormValues,
+    methods: UseFormReturn<SignUpFormValues>
+  ): Promise<void> => {
+    handleRegister(formValues, methods);
   };
 
   return (
@@ -44,7 +53,7 @@ const SignUp = () => {
       <Container maxWidth="xl" className={styles.container}>
         <Stack height="100dvh" width="100%" flexDirection="column" alignItems="center" justifyContent="center">
           <Form defaultValues={defaultValues} onSubmit={handleSubmit} className={styles.form}>
-            {({ formState: { isSubmitting } }) => (
+            {({ formState: { isSubmitting }, watch }) => (
               <Stack direction="column" spacing={2}>
                 <Stack direction="row" spacing={2}>
                   <FormInput
@@ -104,7 +113,11 @@ const SignUp = () => {
                   placeholder="Repeat Password"
                   fullWidth
                   className={styles.input}
-                  validate={FormValidator.isNotEmpty}
+                  validate={value => {
+                    const password = watch('password');
+
+                    return FormValidator.all(FormValidator.isNotEmpty, FormValidator.matchesPassword(password))(value);
+                  }}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">

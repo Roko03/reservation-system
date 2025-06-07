@@ -2,6 +2,7 @@ import { UserModel } from '@/model/user.model';
 
 import { authStore } from './auth.store';
 
+
 export const setAuthenticating = (authenticating: boolean): void => {
   authStore.authenticating = authenticating;
 };

@@ -28,7 +28,10 @@ const NavigationSample = () => {
         {navigation?.map(
           navigationItem =>
             navigationItem.accessLevel?.includes(UserRoleName.USER) && (
-              <ListItem className={cx(styles.item, { [styles.active]: isActive(navigationItem.path!) })}>
+              <ListItem
+                key={navigationItem.path}
+                className={cx(styles.item, { [styles.active]: isActive(navigationItem.path!) })}
+              >
                 <Link to={navigationItem.path || '/'}>
                   <ListItemText
                     primary={navigationItem.text}

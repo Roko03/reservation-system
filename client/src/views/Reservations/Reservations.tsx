@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Container, Paper, SelectChangeEvent, Stack } from '@mui/material';
+import { Chip, Container, Paper, SelectChangeEvent, Stack } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 
 import Autocomplete from '@/components/Autocomplete';
@@ -155,7 +155,19 @@ const Reservations = () => {
                 email: reservation.user.email,
                 objectId: reservation.object.name,
                 date: `${DateTime.formatHR(dayjs(reservation.date))} - ${formatTime(reservation.time)}`,
-                status: RESERVATION_STATUS_LABEL_MAP[reservation.status],
+                status: (
+                  <Chip
+                    color={
+                      // eslint-disable-next-line no-nested-ternary
+                      RESERVATION_STATUS_LABEL_MAP[reservation.status] === 'Odbijena'
+                        ? 'error'
+                        : RESERVATION_STATUS_LABEL_MAP[reservation.status] === 'Prihvaceno'
+                          ? 'success'
+                          : 'warning'
+                    }
+                    label={RESERVATION_STATUS_LABEL_MAP[reservation.status]}
+                  />
+                ),
               }))}
             />
             <Pagination page={pageNumber + 1} onChange={handlePageChange} count={Math.ceil(totalCount / PAGE_SIZE)} />

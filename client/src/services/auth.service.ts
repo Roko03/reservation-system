@@ -1,10 +1,10 @@
-import { POST_REQUEST_PARAMETERS, authHeaders } from '@/config/constants.config';
+import { PATCH_REQUEST_PARAMETERS, POST_REQUEST_PARAMETERS, authHeaders } from '@/config/constants.config';
 import { LoginFormValues, SignUpFormValues } from '@/config/forms/form-models.config';
 import { ErrorModel } from '@/model/error.model';
-import { LoginResponse, PayloadResponse, RegisterResponse } from '@/types/response.type';
+import { LoginResponse, PayloadResponse, RegisterResponse, VerifyResponse } from '@/types/response.type';
 
 export default class AuthService {
-  public static async register(payload: SignUpFormValues): Promise<PayloadResponse<string | null>> {
+  public static async register(payload: SignUpFormValues): Promise<PayloadResponse<boolean | null>> {
     try {
       const response = await fetch(`${import.meta.env.VITE_WS_API_URL}/auth/signup`, {
         ...POST_REQUEST_PARAMETERS,
@@ -17,9 +17,9 @@ export default class AuthService {
         return { payload: null, message: body.message };
       }
 
-      const { token }: RegisterResponse = await response.json();
+      const { message }: RegisterResponse = await response.json();
 
-      return { payload: token };
+      return { payload: true, message };
     } catch {
       return { payload: null, message: 'An unexpected error occurred.' };
     }
@@ -48,10 +48,30 @@ export default class AuthService {
 
   public static async logout(): Promise<void> {
     try {
-      await fetch(`${import.meta.env.VITE_CAPAX_WS_API_URL}/auth/logout`, { headers: authHeaders() });
+      await fetch(`${import.meta.env.VITE_WS_API_URL}/auth/logout`, { headers: authHeaders() });
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Logout failed:', error);
+    }
+  }
+
+  public static async verify(token: string): Promise<PayloadResponse<boolean | null>> {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_WS_API_URL}/auth/verify/${token}`, {
+        ...PATCH_REQUEST_PARAMETERS,
+      });
+
+      if (!response.ok) {
+        const body: ErrorModel = await response.json();
+
+        return { payload: null, message: body.message };
+      }
+
+      const { message }: VerifyResponse = await response.json();
+
+      return { payload: true, message };
+    } catch {
+      return { payload: null, message: 'An unexpected error occurred.' };
     }
   }
 }

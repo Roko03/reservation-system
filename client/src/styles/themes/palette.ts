@@ -13,12 +13,15 @@ const palette: ThemeOptions['palette'] = {
   },
   error: {
     main: colors.red100,
+    contrastText: colors.black50,
   },
   warning: {
     main: colors.orange,
+    contrastText: colors.black50,
   },
   success: {
-    main: colors.green200,
+    main: colors.green100,
+    contrastText: colors.black950,
   },
   info: {
     main: colors.blue100,

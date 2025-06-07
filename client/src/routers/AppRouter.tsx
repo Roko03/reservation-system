@@ -9,6 +9,7 @@ import Error404 from '@/views/Error404';
 
 const Home = lazy(() => import('@/views/Home'));
 const SignUp = lazy(() => import('@/views/SignUp'));
+const Verify = lazy(() => import('@/views/Verify'));
 const Login = lazy(() => import('@/views/Login'));
 const Admin = lazy(() => import('@/views/Admin'));
 const Calendar = lazy(() => import('@/views/Calendar'));
@@ -26,6 +27,7 @@ const AppRouter: React.FC = () => (
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<AppRoute variant="anonymous" component={<Login />} />} />
         <Route path="/signup" element={<AppRoute variant="anonymous" component={<SignUp />} />} />
+        <Route path="/verify/:id" element={<AppRoute variant="anonymous" component={<Verify />} />} />
         <Route
           path="profile"
           element={<AppRoute variant="protected" accessLevel={[UserRoleName.USER]} component={<Profile />} />}

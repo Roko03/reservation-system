@@ -30,4 +30,12 @@ export class FormValidator {
 
     return /^\d+$/.test(num || '') ? true : 'Must be a whole number';
   };
+
+  public static matchesPassword =
+    (passwordValue: string): ValidationFn =>
+    (value?: string) => {
+      if (!value) return 'Required';
+
+      return value === passwordValue ? true : 'Passwords do not match';
+    };
 }

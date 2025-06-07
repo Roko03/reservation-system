@@ -11,10 +11,6 @@ const Error404 = () => (
           <Typography component="h1" variant="h3" align="center" fontWeight={700} color={colors.black950}>
             Page Not Found
           </Typography>
-          <Typography variant="body1" align="center" color={colors.black950}>
-            The page you’re looking for doesn’t exist. <br />
-            Check the URL or go back to the homepage.
-          </Typography>
         </Stack>
       </Paper>
     </Container>
