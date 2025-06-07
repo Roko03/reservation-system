@@ -17,3 +17,7 @@ export type LoginResponse = {
   refreshToken: string;
   userId: number;
 };
+
+export type RegisterResponse = {
+  token: string;
+};

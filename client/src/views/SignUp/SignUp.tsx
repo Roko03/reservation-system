@@ -26,7 +26,7 @@ const SignUp = () => {
   const [passwordVisibility, togglePasswordVisibility] = useToggleState();
 
   const handleRegister = async (formValues: SignUpFormValues) => {
-    const { payload, message } = await AuthService.login(formValues);
+    const { payload, message } = await AuthService.register(formValues);
 
     showToast({
       status: payload ? 'success' : 'error',

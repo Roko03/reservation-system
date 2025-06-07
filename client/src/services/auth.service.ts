@@ -1,7 +1,7 @@
 import { POST_REQUEST_PARAMETERS, authHeaders } from '@/config/constants.config';
 import { LoginFormValues, SignUpFormValues } from '@/config/forms/form-models.config';
 import { ErrorModel } from '@/model/error.model';
-import { LoginResponse, PayloadResponse } from '@/types/response.type';
+import { LoginResponse, PayloadResponse, RegisterResponse } from '@/types/response.type';
 
 export default class AuthService {
   public static async register(payload: SignUpFormValues): Promise<PayloadResponse<string | null>> {
@@ -17,9 +17,9 @@ export default class AuthService {
         return { payload: null, message: body.message };
       }
 
-      const { userId, token }: LoginResponse = await response.json();
+      const { token }: RegisterResponse = await response.json();
 
-      return { payload: JSON.stringify({ id: userId, accessToken: token }) };
+      return { payload: token };
     } catch {
       return { payload: null, message: 'An unexpected error occurred.' };
     }
