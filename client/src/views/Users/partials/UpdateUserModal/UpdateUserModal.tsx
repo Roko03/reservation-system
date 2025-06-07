@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 
-import { Stack, Typography } from '@mui/material';
+import { Stack } from '@mui/material';
 
 import Form from '@/components/Forms/Form';
 import FormInput, { FormInputProps } from '@/components/Forms/FormInput';

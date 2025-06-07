@@ -5,11 +5,10 @@ import FormInput from '@/components/Forms/FormInput';
 import Layout from '@/components/Layout';
 import EyeClosed from '@/components/SvgIcons/EyeClosed';
 import EyeOpen from '@/components/SvgIcons/EyeOpen';
-import { LoginFormValues, SignUpFormValues } from '@/config/forms/form-models.config';
+import { SignUpFormValues } from '@/config/forms/form-models.config';
 import AuthService from '@/services/auth.service';
 import useToggleState from '@/utils/hooks/useToggleState';
 import { FormValidator } from '@/utils/static/FormValidator';
-import { setToken } from '@/valtio/auth/auth.actions';
 import { showToast } from '@/valtio/global/global.actions';
 
 import styles from './SignUp.module.scss';
