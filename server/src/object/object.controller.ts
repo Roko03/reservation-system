@@ -10,7 +10,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ObjectService } from './object.service';
-import { EditObjectDto, ObjectDto, ReservationDto } from './dto';
+import {
+  EditObjectDto,
+  GetAvailableTimesDto,
+  ObjectDto,
+  ReservationDto,
+} from './dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Role } from '@prisma/client';
@@ -95,5 +100,12 @@ export class ObjectController {
     @Body() dto: ReservationDto,
   ) {
     return this.objectService.createReservation(userId, objectId, dto);
+  }
+
+  @Post('/available-times')
+  @Roles(Role.USER)
+  @UseGuards(RolesGuard)
+  getAvailableTimes(@Body() dto: GetAvailableTimesDto) {
+    return this.objectService.getAvailableTimes(dto);
   }
 }

@@ -114,13 +114,6 @@ export class MeService {
               image: true,
               workTimeFrom: true,
               workTimeTo: true,
-              unavailablePeriods: {
-                select: {
-                  id: true,
-                  startDate: true,
-                  endDate: true,
-                },
-              },
             },
           },
         },
@@ -180,14 +173,14 @@ export class MeService {
     date.setHours(0, 0, 0, 0);
 
     const [hours, minutes] = dto.time.split(':').map(Number);
-    const time = new Date(0); // Epoch start
+    const time = new Date(0);
     time.setUTCHours(hours, minutes, 0, 0);
 
-    const isSameDateTime =
+    const isSameReservation =
       date.getTime() === reservation.date.getTime() &&
       time.getTime() === reservation.time.getTime();
 
-    if (isSameDateTime) {
+    if (isSameReservation) {
       throw new BadRequestException('Nema promjena u rezervaciji.');
     }
 
@@ -200,22 +193,24 @@ export class MeService {
       throw new ForbiddenException('Objekt nije dostupan u odabranom terminu.');
     }
 
-    const overlappingReservation = await this.prisma.reservation.findFirst({
+    const overlappingReservation = await this.prisma.reservation.findUnique({
       where: {
-        objectId: reservation.objectId,
-        NOT: { id: reservationId },
-        date,
-        time,
+        objectId_date_time: {
+          objectId: reservation.objectId,
+          date,
+          time,
+        },
       },
     });
 
-    if (overlappingReservation) {
+    if (overlappingReservation && overlappingReservation.id !== reservationId) {
       throw new ForbiddenException('Termin je već zauzet.');
     }
 
     await this.prisma.reservation.update({
       where: { id: reservationId, userId },
       data: {
+        objectId: reservation.objectId,
         date,
         time,
       },

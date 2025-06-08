@@ -6,7 +6,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { EditObjectDto, ObjectDto, ReservationDto } from './dto';
+import {
+  EditObjectDto,
+  GetAvailableTimesDto,
+  ObjectDto,
+  ReservationDto,
+} from './dto';
 import { Reservation } from '@prisma/client';
 
 @Injectable()
@@ -262,6 +267,56 @@ export class ObjectService {
     return {
       statusCode: HttpStatus.OK,
       message: 'Rezervacija uspješno izbrisana',
+    };
+  }
+
+  async getAvailableTimes(dto: GetAvailableTimesDto) {
+    const { objectId, date } = dto;
+
+    const object = await this.prisma.object.findUnique({
+      where: { id: objectId },
+      select: {
+        workTimeFrom: true,
+        workTimeTo: true,
+      },
+    });
+
+    if (!object) {
+      throw new NotFoundException('Objekt ne postoji');
+    }
+
+    const workTimeFrom = parseInt(object.workTimeFrom.split(':')[0], 10);
+    const workTimeTo = parseInt(object.workTimeTo.split(':')[0], 10);
+
+    const targetDate = new Date(date);
+    targetDate.setHours(0, 0, 0, 0);
+
+    const existingReservations = await this.prisma.reservation.findMany({
+      where: {
+        objectId,
+        date: targetDate,
+      },
+      select: {
+        time: true,
+      },
+    });
+
+    const reservedTimes = new Set(
+      existingReservations.map((res) =>
+        res.time.toISOString().substring(11, 16),
+      ),
+    );
+
+    const availableTimes: string[] = [];
+    for (let hour = workTimeFrom; hour < workTimeTo; hour++) {
+      const time = `${hour.toString().padStart(2, '0')}:00`;
+      if (!reservedTimes.has(time)) {
+        availableTimes.push(time);
+      }
+    }
+
+    return {
+      entities: availableTimes,
     };
   }
 }
