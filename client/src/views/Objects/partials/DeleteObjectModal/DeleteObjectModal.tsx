@@ -32,7 +32,7 @@ const DeleteObjectModal = ({ isOpen, onClose }: DeleteObjectModalProps) => {
 
     showToast({
       status: payload ? 'success' : 'error',
-      text: payload ? 'Objekt izbrisan' : message || 'Prilikom brisanja korisnika doslo je do pogreske',
+      text: payload ? 'Objekt izbrisan' : message || 'Prilikom brisanja objekta doslo je do pogreske',
     });
 
     onClose();

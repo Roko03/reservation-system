@@ -27,3 +27,7 @@ export type VerifyResponse = {
   error: string;
   statusCode: number;
 };
+
+export type AvailableTimesResponse<T> = {
+  entities: T[];
+};

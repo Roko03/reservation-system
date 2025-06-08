@@ -28,3 +28,10 @@ export interface CreateObjectTimeStringFormValues {
   workTimeTo: string;
   unvailableDates?: UnavailablePeriod[];
 }
+
+export interface CreateReservationFormValues {
+  date: Dayjs | null;
+  time: string;
+}
+
+export interface UpdateReservationFormValues extends CreateReservationFormValues {}

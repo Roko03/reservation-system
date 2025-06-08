@@ -5,6 +5,7 @@ import { ObjectModel } from '@/model/object.model';
 interface ObjectsStore {
   objects: ObjectModel[];
   selectedObject?: ObjectModel;
+  availableTimes?: string[];
   totalCount: number;
   isLoading: boolean;
   createObjectModalOpen: boolean;
@@ -15,6 +16,7 @@ interface ObjectsStore {
 export const objectsStore = proxy<ObjectsStore>({
   objects: [],
   selectedObject: undefined,
+  availableTimes: undefined,
   totalCount: 0,
   isLoading: false,
   createObjectModalOpen: false,

@@ -7,7 +7,8 @@ import {
 import { CreateObjectTimeStringFormValues } from '@/config/form-models.config';
 import { ErrorModel } from '@/model/error.model';
 import { ObjectModel } from '@/model/object.model';
-import { PaginatedResponse, PayloadResponse } from '@/types/response.type';
+import { GetAvailableTimesFormValues } from '@/types/available-time.type';
+import { AvailableTimesResponse, PaginatedResponse, PayloadResponse } from '@/types/response.type';
 import { createQueryParams } from '@/utils/static/queryParams';
 
 export default class ObjectsService {
@@ -113,6 +114,27 @@ export default class ObjectsService {
       return { payload: true };
     } catch {
       return { payload: false };
+    }
+  }
+
+  public static async getAvailableTimes(payload: GetAvailableTimesFormValues): Promise<AvailableTimesResponse<string>> {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_WS_API_URL}/object/available-times`, {
+        ...POST_REQUEST_PARAMETERS,
+        headers: {
+          ...POST_REQUEST_PARAMETERS.headers,
+          ...Object.fromEntries(authHeaders()),
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        return { entities: [] };
+      }
+
+      return await response.json();
+    } catch {
+      return { entities: [] };
     }
   }
 }

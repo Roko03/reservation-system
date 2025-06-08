@@ -35,9 +35,9 @@ const ReservationsList = () => {
     <Container component="section" maxWidth={false}>
       <Stack py={4}>
         <Grid container>
-          {reservations.map(reservation => (
-            <Grid size={{ xs: 12, md: 6, xl: 4 }} justifyContent="center">
-              <ReservationCard {...reservation} />
+          {reservations.map((reservation, index) => (
+            <Grid key={reservation.id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+              <ReservationCard {...reservation} reservationIndex={index} />
             </Grid>
           ))}
         </Grid>

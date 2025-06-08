@@ -23,6 +23,7 @@ export interface UserSummary {
 }
 
 export interface ObjectSummary {
+  id: string;
   name: string;
   location: string;
   image?: string | null;

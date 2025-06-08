@@ -27,8 +27,8 @@ const AppRouter: React.FC = () => (
         <Route path="/login" element={<AppRoute variant="anonymous" component={<Login />} />} />
         <Route path="/signup" element={<AppRoute variant="anonymous" component={<SignUp />} />} />
         <Route path="/verify/:id" element={<AppRoute variant="anonymous" component={<Verify />} />} />
-        <Route path="objects">
-          <Route index element={<Objects />} />
+        <Route path="objects" element={<Objects />}>
+          <Route path=":id" />
         </Route>
         <Route
           path="profile"

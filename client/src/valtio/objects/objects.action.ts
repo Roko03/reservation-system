@@ -1,4 +1,5 @@
 import ObjectsService from '@/services/objects.service';
+import { GetAvailableTimesFormValues } from '@/types/available-time.type';
 
 import { objectsStore } from './objects.store';
 
@@ -18,12 +19,22 @@ export async function getSelectedObject(id: string): Promise<void> {
   objectsStore.selectedObject = response!;
 }
 
+export async function getAvailableTimeObject(payload: GetAvailableTimesFormValues): Promise<void> {
+  const { entities } = await ObjectsService.getAvailableTimes(payload);
+
+  objectsStore.availableTimes = entities;
+}
+
 export function toggleCreateObjectModal(isOpen?: boolean | React.MouseEvent): void {
   objectsStore.createObjectModalOpen = typeof isOpen === 'boolean' ? isOpen : !objectsStore.createObjectModalOpen;
 }
 
 export function clearSelectedObject(): void {
   objectsStore.selectedObject = undefined;
+}
+
+export function clearSelectedAvailableTimeObject(): void {
+  objectsStore.availableTimes = undefined;
 }
 
 export function toggleUpdateObjectModal(isOpen?: boolean | React.MouseEvent): void {

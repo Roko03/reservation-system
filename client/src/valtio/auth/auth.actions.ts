@@ -24,3 +24,19 @@ export const setUser = (user: UserModel | null): void => {
 export const setToken = (token: string | null): void => {
   authStore.token = token;
 };
+
+export function clearSelectedReservation(): void {
+  authStore.selectedReservation = undefined;
+}
+
+export function toggleUpdateReservationModal(isOpen?: boolean | React.MouseEvent): void {
+  authStore.updateReservationModalOpen = typeof isOpen === 'boolean' ? isOpen : !authStore.updateReservationModalOpen;
+}
+
+export function toggleDeleteReservationModal(isOpen?: boolean | React.MouseEvent): void {
+  authStore.deleteReservationModalOpen = typeof isOpen === 'boolean' ? isOpen : !authStore.deleteReservationModalOpen;
+}
+
+export function findReservation(index: string): void {
+  authStore.selectedReservation = authStore.reservations[+index];
+}
