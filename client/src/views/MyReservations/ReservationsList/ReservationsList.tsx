@@ -34,7 +34,7 @@ const ReservationsList = () => {
   return (
     <Container component="section" maxWidth={false}>
       <Stack py={4}>
-        <Grid container>
+        <Grid container spacing={2}>
           {reservations.map((reservation, index) => (
             <Grid key={reservation.id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <ReservationCard {...reservation} reservationIndex={index} />

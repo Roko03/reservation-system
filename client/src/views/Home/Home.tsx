@@ -29,7 +29,7 @@ const Home: React.FC = () => {
     <Layout>
       <MainHeroSection title="DOBRODOŠLI" description="Pronađite dostupne termine" />
       <Container component="section" maxWidth={false}>
-        <Grid container py={4}>
+        <Grid container spacing={2} py={4}>
           {objects.slice(0, 2).map(object => (
             <Grid key={object.id} size={{ xs: 12, md: 6, xl: 4 }} justifyContent="center">
               <ObjectCard {...object} />

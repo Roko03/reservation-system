@@ -25,7 +25,7 @@ const ObjectModal = ({ onClose }: ObjectModalProps) => {
     <Modal open fullScreen={isMobile} title={`${name || ''}`} onClose={onClose} hideCancelButton hideConfirmButton>
       <Stack direction="column" spacing={2}>
         <Box className={styles.imageWrapper}>
-          <img src={image!} alt="cover" className={styles.image} />
+          <img src={image!} alt="cover" className={styles.image} crossOrigin="anonymous" />
         </Box>
         <Stack direction="row" alignItems="center" spacing={0.5}>
           <Typography variant="body1" fontWeight={600}>

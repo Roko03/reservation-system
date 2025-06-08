@@ -69,6 +69,7 @@ const ReservationCard = ({ reservationIndex, date, time, status, object }: Reser
             }}
             image={object.image}
             alt="Object image"
+            crossOrigin="anonymous"
           />
         ) : (
           <Box

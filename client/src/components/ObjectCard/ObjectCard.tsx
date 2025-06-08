@@ -32,6 +32,7 @@ const ObjectCard = ({ id, name, location, image, workTimeFrom, workTimeTo }: Obj
           }}
           image={image}
           alt="Object image"
+          crossOrigin="anonymous"
         />
       ) : (
         <Box sx={{ flex: 1, width: '100%', height: '100%', background: colors.black200 }} />

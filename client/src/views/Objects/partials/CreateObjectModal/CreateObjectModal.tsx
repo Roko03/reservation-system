@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { Stack } from '@mui/material';
+import { CircularProgress, Stack, Typography } from '@mui/material';
 
 import DiscardDialog from '@/components/DiscardDialog';
+import FileUpload from '@/components/FileUpload/FileUpload';
 import Form from '@/components/Forms/Form';
 import FormInput from '@/components/Forms/FormInput';
 import Modal from '@/components/Modal';
@@ -37,8 +39,45 @@ const CreateObjectModal = ({ isOpen, onClose }: CreateObjectModalProps) => {
   const [discard, toggleDiscard] = useToggleState();
   const { isMobile } = useBreakpoint();
   const { isFormDirty } = useGlobalStore();
-
   const [searchParams] = useSearchParams();
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const [uploading, setUploading] = useState(false);
+
+  const uploadToServer = async (file: File) => {
+    try {
+      setUploading(true);
+
+      const formData = new FormData();
+
+      formData.append('file', file);
+
+      const response = await fetch('https://api.escuelajs.co/api/v1/files/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.status === 201) {
+        const data = await response.json();
+
+        setImageUrl(data.location);
+      }
+    } catch (error) {
+      showToast({ status: 'error', text: 'Upload error occurred.' });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleFileSelected = async (file: File) => {
+    const reader = new FileReader();
+
+    reader.onload = e => {
+      if (e.target?.result) setImageUrl(e.target.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    await uploadToServer(file);
+  };
 
   const refreshView = () => {
     const page = Number(searchParams.get('page')) || PAGE_NUMBER;
@@ -48,8 +87,11 @@ const CreateObjectModal = ({ isOpen, onClose }: CreateObjectModalProps) => {
   };
 
   const handleSubmit = async (formValues: ObjectFormValues): Promise<void> => {
-    formValues.image =
-      'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2';
+    if (!imageUrl) {
+      return;
+    }
+
+    formValues.image = imageUrl;
 
     const values: CreateObjectTimeStringFormValues = {
       ...formValues,
@@ -93,6 +135,13 @@ const CreateObjectModal = ({ isOpen, onClose }: CreateObjectModalProps) => {
 
           return (
             <>
+              <Stack direction="row" spacing={1} alignItems="center" position="relative" pb={2}>
+                <Stack maxWidth="200px">
+                  <FileUpload onFileSelected={handleFileSelected} />
+                </Stack>
+                {uploading && <CircularProgress />}
+                {imageUrl && <Typography variant="body2">{imageUrl}</Typography>}
+              </Stack>
               <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
                 <FormInput name="name" placeholder="Naziv objekta" validate={FormValidator.isNotEmpty} />
                 <FormInput name="location" placeholder="Lokacija" validate={FormValidator.isNotEmpty} />

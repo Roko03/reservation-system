@@ -52,7 +52,7 @@ const ObjectsUser = () => {
         <MainHeroSection title="Objekti" description="Pronađite dostupne termine" />
         <Container component="section" maxWidth={false}>
           <Stack py={4}>
-            <Grid container>
+            <Grid container spacing={2}>
               {objects.map(object => (
                 <Grid key={object.id} size={{ xs: 12, md: 6, xl: 4 }} justifyContent="center">
                   <ObjectCard {...object} />

@@ -62,7 +62,7 @@ const ObjectReservationModal = ({ onClose }: ObjectReservationModalProps) => {
       <Stack direction="column">
         <Stack direction="column" spacing={2}>
           <Box className={styles.imageWrapper}>
-            <img src={image!} alt="cover" className={styles.image} />
+            <img src={image!} alt="cover" className={styles.image} crossOrigin="anonymous" />
           </Box>
           <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={0.5}>
             <Typography display="flex" alignItems="center" variant="body1" color={colors.black950}>
