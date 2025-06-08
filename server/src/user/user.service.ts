@@ -60,9 +60,26 @@ export class UserService {
   }
 
   async getUser(userId: string) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        firstname: true,
+        lastName: true,
+        email: true,
+        phoneNumber: true,
+        profileImage: true,
+        createdAt: true,
+        updatedAt: true,
+        role: true,
+        isVerified: true,
+        userAgent: true,
+      },
+    });
 
-    if (!user) throw new NotFoundException('Korisnik ne postoji');
+    if (!user) {
+      throw new NotFoundException('Korisnik ne postoji');
+    }
 
     return user;
   }

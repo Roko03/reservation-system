@@ -62,7 +62,7 @@ export class AuthService {
       await this.mailerService.sendEmail(
         user.email,
         'Verifikacijski token',
-        token.tokenValue,
+        `${this.config.get('FRONTEND_URL')}/verify/${token.tokenValue}`,
       );
 
       return {

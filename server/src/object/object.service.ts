@@ -200,11 +200,15 @@ export class ObjectService {
     message: string;
     data: Reservation;
   }> {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException('Korisnik ne postoji');
+    }
+
     const object = await this.prisma.object.findUnique({
       where: { id: objectId },
       include: { unavailablePeriods: true },
     });
-
     if (!object) {
       throw new NotFoundException('Objekt ne postoji');
     }

@@ -68,7 +68,7 @@ export class AuthController {
     return this.authService.googleLogin(res, req);
   }
 
-  @Post('logout')
+  @Get('logout')
   @HttpCode(HttpStatus.OK)
   logout(
     @GetCurrentUserId() userId: string,

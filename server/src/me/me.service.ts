@@ -1,13 +1,13 @@
 import {
   BadRequestException,
   ForbiddenException,
-  HttpException,
   HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { EditReservationDto } from './dto';
+import { EditReservationDto, EditUserDto } from './dto';
+import { Response } from 'express';
 
 @Injectable()
 export class MeService {
@@ -17,6 +17,7 @@ export class MeService {
     return this.prisma.user.findUnique({
       where: { id: userId },
       select: {
+        id: true,
         firstname: true,
         lastName: true,
         email: true,
@@ -24,8 +25,68 @@ export class MeService {
         profileImage: true,
         createdAt: true,
         updatedAt: true,
+        role: true,
+        isVerified: true,
+        userAgent: true,
       },
     });
+  }
+
+  async editUser(userId: string, dto: EditUserDto) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user) throw new NotFoundException('Korisnik ne postoji');
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        firstname: dto.firstName,
+        lastName: dto.lastName,
+        email: dto.email,
+        profileImage: dto.profileImage,
+        phoneNumber: dto.phoneNumber,
+      },
+      select: {
+        id: true,
+        firstname: true,
+        lastName: true,
+        email: true,
+        phoneNumber: true,
+        profileImage: true,
+        createdAt: true,
+        updatedAt: true,
+        role: true,
+        isVerified: true,
+        userAgent: true,
+      },
+    });
+
+    return {
+      message: 'Korisnik uspješno ažuriran',
+      payload: updatedUser,
+    };
+  }
+
+  async deleteUser(userId: string, res: Response) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user) throw new NotFoundException('Korisnik ne postoji');
+
+    await this.prisma.user.delete({ where: { id: user.id } });
+
+    res.cookie('refreshToken', '', {
+      sameSite: 'none',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 0,
+    });
+
+    res.clearCookie('refreshToken');
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Korisnik uspješno izbrisan',
+    };
   }
 
   async getUserReservation(
@@ -33,19 +94,46 @@ export class MeService {
     pageSize: number,
     currentPage: number,
   ) {
-    let skip = currentPage * pageSize;
+    const skip = currentPage * pageSize;
 
-    return this.prisma.reservation.findMany({
-      where: { userId },
-      take: pageSize,
-      skip,
-      select: {
-        id: true,
-        date: true,
-        time: true,
-        object: { select: { id: true, name: true, location: true } },
-      },
-    });
+    const [entities, totalCount] = await this.prisma.$transaction([
+      this.prisma.reservation.findMany({
+        where: { userId },
+        take: pageSize,
+        skip,
+        select: {
+          id: true,
+          date: true,
+          time: true,
+          status: true,
+          object: {
+            select: {
+              id: true,
+              name: true,
+              location: true,
+              image: true,
+              workTimeFrom: true,
+              workTimeTo: true,
+              unavailablePeriods: {
+                select: {
+                  id: true,
+                  startDate: true,
+                  endDate: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+      this.prisma.reservation.count({
+        where: { userId },
+      }),
+    ]);
+
+    return {
+      entities,
+      totalCount,
+    };
   }
 
   async getUserReservationById(userId: string, reservationId: string) {
@@ -55,7 +143,9 @@ export class MeService {
         id: true,
         date: true,
         time: true,
-        object: { select: { id: true, name: true, location: true } },
+        object: {
+          select: { id: true, name: true, location: true, image: true },
+        },
       },
     });
 
