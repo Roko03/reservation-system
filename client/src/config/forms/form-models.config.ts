@@ -22,3 +22,7 @@ export interface ContactFormValues {
   email: string;
   message: string;
 }
+
+export interface ProfileFormValues extends Omit<SignUpFormValues, 'password' | 'repassword'> {
+  profileImage: string;
+}

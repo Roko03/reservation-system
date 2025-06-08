@@ -1,7 +1,13 @@
-import React from 'react';
-
 import Layout from '@/components/Layout';
+import MainHeroSection from '@/components/MainHeroSection';
 
-const MyReservations = () => <Layout>My Reservation</Layout>;
+import ReservationsList from './ReservationsList';
+
+const MyReservations = () => (
+  <Layout>
+    <MainHeroSection title="Moje rezervacije" />
+    <ReservationsList />
+  </Layout>
+);
 
 export default MyReservations;

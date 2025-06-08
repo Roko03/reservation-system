@@ -18,6 +18,7 @@ const defaultValues: LoginFormValues = {
   email: '',
   password: '',
 };
+
 const Login = () => {
   const [passwordVisibility, togglePasswordVisibility] = useToggleState();
 

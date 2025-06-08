@@ -25,6 +25,7 @@ export interface UserSummary {
 export interface ObjectSummary {
   name: string;
   location: string;
+  image?: string | null;
 }
 
 export interface ReservationModel {

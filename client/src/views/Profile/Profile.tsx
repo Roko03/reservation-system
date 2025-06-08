@@ -1,7 +1,17 @@
 import React from 'react';
 
+import ContactSection from '@/components/ContactSection';
 import Layout from '@/components/Layout';
+import MainHeroSection from '@/components/MainHeroSection';
 
-const Profile = () => <Layout>Profile</Layout>;
+import ProfileForm from './ProfileForm';
+
+const Profile = () => (
+  <Layout>
+    <MainHeroSection title="Profil" />
+    <ProfileForm />
+    <ContactSection />
+  </Layout>
+);
 
 export default Profile;

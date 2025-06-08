@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
+import { Event, ExitToApp } from '@mui/icons-material';
+import PersonIcon from '@mui/icons-material/Person';
 import { Avatar, Divider, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 
 import { UserRoleName } from '@/model/user.model';
@@ -15,6 +17,7 @@ const ProfileDropdown = () => {
   const handleLogout = useLogout();
   const navigate = useNavigate();
   const { user } = useAuthStore();
+  const { pathname } = useLocation();
 
   const isAdmin = user && roleGuard(user.role, [UserRoleName.ADMIN, UserRoleName.SUPERADMIN]);
 
@@ -63,15 +66,30 @@ const ProfileDropdown = () => {
           horizontal: 'right',
         }}
       >
-        {!isAdmin && (
-          <>
-            <MenuItem onClick={() => handleClose('/profile')} className={styles.menuItem}>
-              <Typography variant="body1">Profil</Typography>
-            </MenuItem>
-            <Divider />
-          </>
-        )}
+        {!isAdmin && [
+          <MenuItem
+            key="profile"
+            onClick={() => handleClose('/profile')}
+            selected={pathname.startsWith('/profile')}
+            className={styles.menuItem}
+          >
+            <PersonIcon />
+            <Typography variant="body1">Profil</Typography>
+          </MenuItem>,
+          <Divider key="divider-1" />,
+          <MenuItem
+            key="bookings"
+            onClick={() => handleClose('/my-reservations')}
+            selected={pathname.startsWith('/my-reservations')}
+            className={styles.menuItem}
+          >
+            <Event />
+            <Typography variant="body1">Moje rezervacije</Typography>
+          </MenuItem>,
+          <Divider key="divider-2" />,
+        ]}
         <MenuItem className={styles.menuItem} onClick={handleLogout}>
+          <ExitToApp />
           <Typography variant="body1">Odjavi se</Typography>
         </MenuItem>
       </Menu>

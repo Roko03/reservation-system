@@ -16,7 +16,7 @@ const ContactSection = () => (
     </Typography>
     <Grid container spacing={2} pb={4} margin="auto" maxWidth={850}>
       {socials.map(({ icon: Icon, label, slug }) => (
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid key={label} size={{ xs: 12, md: 4 }}>
           <Link to={slug} target="_blank">
             <Button
               size="large"

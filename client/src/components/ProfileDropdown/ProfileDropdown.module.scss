@@ -4,13 +4,13 @@
 .menuRoot {
   .paper {
     margin-top: rem-calc(12);
-    width: rem-calc(148);
+    width: fit-content;
     padding: rem-calc(8);
     border-radius: rem-calc(8);
 
     .menuItem {
       display: flex;
-      justify-content: space-between;
+      gap: rem-calc(8);
       align-items: center;
       width: 100%;
       border-radius: rem-calc(4);

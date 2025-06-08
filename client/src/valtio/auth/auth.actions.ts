@@ -1,11 +1,21 @@
 import { UserModel } from '@/model/user.model';
+import MeService from '@/services/me.service';
 
 import { authStore } from './auth.store';
-
 
 export const setAuthenticating = (authenticating: boolean): void => {
   authStore.authenticating = authenticating;
 };
+
+export async function getUserReservations(page?: number): Promise<void> {
+  authStore.isLoading = true;
+
+  const { entities, totalCount } = await MeService.getProfileReservations(page);
+
+  authStore.isLoading = false;
+  authStore.reservations = entities;
+  authStore.totalCount = totalCount;
+}
 
 export const setUser = (user: UserModel | null): void => {
   authStore.user = user;

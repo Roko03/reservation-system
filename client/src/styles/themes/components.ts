@@ -486,12 +486,16 @@ const components: ThemeOptions['components'] = {
         '&:hover': {
           backgroundColor: colors.green50,
         },
-        '&:active': {
-          backgroundColor: colors.green100,
+        '&.Mui-selected': {
+          backgroundColor: colors.green50,
+          '&:hover': {
+            backgroundColor: colors.green50,
+          },
         },
       },
     },
   },
+
   MuiRadio: {
     styleOverrides: {
       root: {
