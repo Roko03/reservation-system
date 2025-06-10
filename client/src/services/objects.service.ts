@@ -12,11 +12,16 @@ import { AvailableTimesResponse, PaginatedResponse, PayloadResponse } from '@/ty
 import { createQueryParams } from '@/utils/static/queryParams';
 
 export default class ObjectsService {
-  public static async getObjects(pageNumber?: number, search?: string): Promise<PaginatedResponse<ObjectModel>> {
+  public static async getObjects(
+    pageNumber?: number,
+    search?: string,
+    city?: string
+  ): Promise<PaginatedResponse<ObjectModel>> {
     try {
       const queryParams = createQueryParams({
         pageNumber,
         search,
+        city,
       });
 
       const url = `${import.meta.env.VITE_WS_API_URL}/object${queryParams}`;

@@ -5,8 +5,10 @@ import { Button, Stack } from '@mui/material';
 import Form from '@/components/Forms/Form';
 import FormInput from '@/components/Forms/FormInput';
 import { ContactFormValues } from '@/config/forms/form-models.config';
+import MailService from '@/services/mail.service';
 import colors from '@/styles/themes/colors';
 import { FormValidator } from '@/utils/static/FormValidator';
+import { showToast } from '@/valtio/global/global.actions';
 
 const defaultValues: ContactFormValues = {
   email: '',
@@ -15,7 +17,12 @@ const defaultValues: ContactFormValues = {
 
 const ContactForm = () => {
   const handleSubmit = async (formValues: ContactFormValues): Promise<void> => {
-    console.log(formValues);
+    const { payload, message } = await MailService.contactMe(formValues);
+
+    showToast({
+      status: payload ? 'success' : 'error',
+      text: payload ? 'Upit je poslan' : message || 'Prilikom slanja upita doslo je do greske',
+    });
   };
 
   return (

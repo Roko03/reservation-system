@@ -17,6 +17,8 @@ export interface ObjectFormValues {
   image?: string;
   workTimeFrom: Dayjs | null;
   workTimeTo: Dayjs | null;
+  type: string;
+  terrainType: string;
   unvailableDates?: UnavailablePeriod[];
 }
 
@@ -26,6 +28,8 @@ export interface CreateObjectTimeStringFormValues {
   image?: string;
   workTimeFrom: string;
   workTimeTo: string;
+  type: string;
+  terrainType: string;
   unvailableDates?: UnavailablePeriod[];
 }
 

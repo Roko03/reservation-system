@@ -3,10 +3,10 @@ import { GetAvailableTimesFormValues } from '@/types/available-time.type';
 
 import { objectsStore } from './objects.store';
 
-export async function getObjects(page?: number, search?: string): Promise<void> {
+export async function getObjects(page?: number, search?: string, selectedCity?: string): Promise<void> {
   objectsStore.isLoading = true;
 
-  const { entities, totalCount } = await ObjectsService.getObjects(page, search);
+  const { entities, totalCount } = await ObjectsService.getObjects(page, search, selectedCity);
 
   objectsStore.isLoading = false;
   objectsStore.objects = entities;

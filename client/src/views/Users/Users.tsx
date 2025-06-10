@@ -63,7 +63,7 @@ const Users = () => {
               showSkeleton={isLoading}
               columns={userTableColumns}
               rows={users.map((user, index) => ({
-                key: `#${index + 1}`,
+                key: `#${(pageNumber - 1) * PAGE_SIZE + index + 1}`,
                 user: `${user.firstname} ${user.lastName}`,
                 email: user.email,
                 phoneNumber: user.phoneNumber,

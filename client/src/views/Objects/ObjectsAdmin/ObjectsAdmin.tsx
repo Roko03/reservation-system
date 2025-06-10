@@ -78,13 +78,13 @@ const ObjectsAdmin = () => {
               columns={objectTableColumns}
               rows={objects.map((object, index) => ({
                 key: object.id,
-                number: `#${index + 1}`,
+                number: `#${(pageNumber - 1) * PAGE_SIZE + index + 1}`,
                 name: object.name,
                 location: object.location,
                 workTime: `${object.workTimeFrom} - ${object.workTimeTo}`,
               }))}
             />
-            <Pagination page={pageNumber + 1} onChange={handlePageChange} count={Math.ceil(totalCount / PAGE_SIZE)} />
+            <Pagination page={pageNumber} onChange={handlePageChange} count={Math.ceil(totalCount / PAGE_SIZE)} />
           </Paper>
         </Container>
       </Layout>

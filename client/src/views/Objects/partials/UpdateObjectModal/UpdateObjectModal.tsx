@@ -1,14 +1,19 @@
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { Stack } from '@mui/material';
+import { CircularProgress, Stack, Typography } from '@mui/material';
 
+import FileUpload from '@/components/FileUpload/FileUpload';
 import Form from '@/components/Forms/Form';
-import FormInput from '@/components/Forms/FormInput';
+import FormInput, { FormInputProps } from '@/components/Forms/FormInput';
 import Modal from '@/components/Modal';
+import Select from '@/components/Select';
 import TimePicker from '@/components/TimePicker/TimePicker';
 import { PAGE_NUMBER } from '@/config/constants.config';
 import { CreateObjectTimeStringFormValues, ObjectFormValues } from '@/config/form-models.config';
 import { UPDATE_OBJECT_FORM } from '@/config/forms/form-names.config';
+import { CITY_ARRAY } from '@/model/city.model';
+import { OBJECT_TYPE_ARRAY, TERRAIN_TYPE_ARRAY } from '@/model/object-type.model';
 import ObjectsService from '@/services/objects.service';
 import useBreakpoint from '@/utils/hooks/useBreakpoint';
 import DateTime from '@/utils/static/DateTime';
@@ -28,12 +33,16 @@ const defaultValues: ObjectFormValues = {
   image: '',
   workTimeFrom: null,
   workTimeTo: null,
+  type: '',
+  terrainType: '',
   unvailableDates: [],
 };
 
 const UpdateObjectModal = ({ isOpen, onClose }: UpdateObjectModalProps) => {
   const { selectedObject } = useObjectStore();
   const { isMobile } = useBreakpoint();
+  const [imageUrl, setImageUrl] = useState<string>(selectedObject?.image || '');
+  const [uploading, setUploading] = useState(false);
 
   const [searchParams] = useSearchParams();
 
@@ -41,12 +50,85 @@ const UpdateObjectModal = ({ isOpen, onClose }: UpdateObjectModalProps) => {
     ? {
         name: selectedObject.name,
         location: selectedObject.location,
-        image: selectedObject.image || '',
         workTimeFrom: DateTime.fromTimeString(selectedObject.workTimeFrom),
         workTimeTo: DateTime.fromTimeString(selectedObject.workTimeTo),
+        type: selectedObject.type,
+        terrainType: selectedObject.terrainType,
         unvailableDates: selectedObject.unavailablePeriods,
       }
     : defaultValues;
+
+  const uploadToServer = async (file: File) => {
+    try {
+      setUploading(true);
+
+      const formData = new FormData();
+
+      formData.append('file', file);
+
+      const response = await fetch('https://api.escuelajs.co/api/v1/files/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.status === 201) {
+        const data = await response.json();
+
+        setImageUrl(data.location);
+      }
+    } catch (error) {
+      showToast({ status: 'error', text: 'Upload error occurred.' });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleFileSelected = async (file: File) => {
+    const reader = new FileReader();
+
+    reader.onload = e => {
+      if (e.target?.result) setImageUrl(e.target.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    await uploadToServer(file);
+  };
+
+  const renderCityInput: FormInputProps['renderInput'] = ({ field }) => (
+    <Select
+      value={field.value}
+      onChange={field.onChange}
+      options={CITY_ARRAY.map(el => ({
+        id: el,
+        label: el,
+      }))}
+      placeholder="Lokacija"
+    />
+  );
+
+  const renderObjectTypeInput: FormInputProps['renderInput'] = ({ field }) => (
+    <Select
+      value={field.value}
+      onChange={field.onChange}
+      options={OBJECT_TYPE_ARRAY.map(el => ({
+        id: el,
+        label: el,
+      }))}
+      placeholder="Vrsta terena"
+    />
+  );
+
+  const renderTerrainTypeInput: FormInputProps['renderInput'] = ({ field }) => (
+    <Select
+      value={field.value}
+      onChange={field.onChange}
+      options={TERRAIN_TYPE_ARRAY.map(el => ({
+        id: el,
+        label: el,
+      }))}
+      placeholder="Vrsta podloge"
+    />
+  );
 
   const refreshView = () => {
     const page = Number(searchParams.get('page')) || PAGE_NUMBER;
@@ -60,8 +142,7 @@ const UpdateObjectModal = ({ isOpen, onClose }: UpdateObjectModalProps) => {
       return;
     }
 
-    formValues.image =
-      'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2';
+    formValues.image = imageUrl;
 
     const values: CreateObjectTimeStringFormValues = {
       ...formValues,
@@ -82,6 +163,12 @@ const UpdateObjectModal = ({ isOpen, onClose }: UpdateObjectModalProps) => {
     }
   };
 
+  useEffect(() => {
+    if (selectedObject && selectedObject.image) {
+      setImageUrl(selectedObject.image);
+    }
+  }, [selectedObject]);
+
   if (!isOpen) {
     return null;
   }
@@ -101,9 +188,20 @@ const UpdateObjectModal = ({ isOpen, onClose }: UpdateObjectModalProps) => {
       }}
     >
       <Form defaultValues={initialValues} onSubmit={handleSubmit} id={UPDATE_OBJECT_FORM}>
+        <Stack direction="row" spacing={1} alignItems="center" position="relative" pb={2}>
+          <Stack maxWidth="200px">
+            <FileUpload onFileSelected={handleFileSelected} />
+          </Stack>
+          {uploading && <CircularProgress />}
+          {imageUrl && !uploading && <Typography variant="body2">{imageUrl}</Typography>}
+        </Stack>
         <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
           <FormInput name="name" placeholder="Naziv objekta" validate={FormValidator.isNotEmpty} />
-          <FormInput name="location" placeholder="Lokacija" validate={FormValidator.isNotEmpty} />
+          <FormInput name="location" renderInput={renderCityInput} />
+        </Stack>
+        <Stack direction={isMobile ? 'column' : 'row'} spacing={2} mt={2}>
+          <FormInput name="type" renderInput={renderObjectTypeInput} />
+          <FormInput name="terrainType" renderInput={renderTerrainTypeInput} />
         </Stack>
         <Stack direction={isMobile ? 'column' : 'row'} spacing={2} mt={2}>
           <FormInput

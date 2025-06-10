@@ -9,6 +9,7 @@ export const createQueryParams = ({
   status,
   dateFrom,
   dateTo,
+  city,
 }: {
   pageNumber?: number;
   pageSize?: number;
@@ -17,6 +18,7 @@ export const createQueryParams = ({
   status?: ReservationStatus;
   dateFrom?: string;
   dateTo?: string;
+  city?: string;
 }): string => {
   const params = new URLSearchParams(
     Object.entries({
@@ -27,6 +29,7 @@ export const createQueryParams = ({
       status,
       dateFrom,
       dateTo,
+      city,
     })
       .filter(([, value]) => value !== undefined)
       .map(([key, value]) => [key, String(value)])

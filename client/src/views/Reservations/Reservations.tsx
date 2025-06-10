@@ -151,7 +151,7 @@ const Reservations = () => {
               showSkeleton={isLoading}
               columns={reservationTableColumns}
               rows={reservations.map((reservation, index) => ({
-                key: `#${index + 1}`,
+                key: `#${(pageNumber - 1) * PAGE_SIZE + index + 1}`,
                 email: reservation.user.email,
                 objectId: reservation.object.name,
                 date: `${DateTime.formatHR(dayjs(reservation.date))} - ${formatTime(reservation.time)}`,

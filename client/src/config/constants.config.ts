@@ -29,7 +29,7 @@ export const PUT_REQUEST_PARAMETERS = {
   },
 };
 
-export const PAGE_NUMBER = 0;
+export const PAGE_NUMBER = 1;
 export const PAGE_SIZE = 10;
 
 export type SortDirection = 'asc' | 'desc';

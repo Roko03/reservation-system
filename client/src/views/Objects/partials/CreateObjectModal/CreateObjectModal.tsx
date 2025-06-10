@@ -6,12 +6,15 @@ import { CircularProgress, Stack, Typography } from '@mui/material';
 import DiscardDialog from '@/components/DiscardDialog';
 import FileUpload from '@/components/FileUpload/FileUpload';
 import Form from '@/components/Forms/Form';
-import FormInput from '@/components/Forms/FormInput';
+import FormInput, { FormInputProps } from '@/components/Forms/FormInput';
 import Modal from '@/components/Modal';
+import Select from '@/components/Select';
 import TimePicker from '@/components/TimePicker/TimePicker';
 import { PAGE_NUMBER } from '@/config/constants.config';
 import { CreateObjectTimeStringFormValues, ObjectFormValues } from '@/config/form-models.config';
 import { CREATE_OBJECT_FORM } from '@/config/forms/form-names.config';
+import { CITY_ARRAY } from '@/model/city.model';
+import { OBJECT_TYPE_ARRAY, TERRAIN_TYPE_ARRAY } from '@/model/object-type.model';
 import ObjectsService from '@/services/objects.service';
 import useBreakpoint from '@/utils/hooks/useBreakpoint';
 import useToggleState from '@/utils/hooks/useToggleState';
@@ -32,6 +35,8 @@ const defaultValues: ObjectFormValues = {
   image: '',
   workTimeFrom: null,
   workTimeTo: null,
+  type: '',
+  terrainType: '',
   unvailableDates: [],
 };
 
@@ -79,6 +84,42 @@ const CreateObjectModal = ({ isOpen, onClose }: CreateObjectModalProps) => {
     await uploadToServer(file);
   };
 
+  const renderCityInput: FormInputProps['renderInput'] = ({ field }) => (
+    <Select
+      value={field.value}
+      onChange={field.onChange}
+      options={CITY_ARRAY.map(el => ({
+        id: el,
+        label: el,
+      }))}
+      placeholder="Lokacija"
+    />
+  );
+
+  const renderObjectTypeInput: FormInputProps['renderInput'] = ({ field }) => (
+    <Select
+      value={field.value}
+      onChange={field.onChange}
+      options={OBJECT_TYPE_ARRAY.map(el => ({
+        id: el,
+        label: el,
+      }))}
+      placeholder="Vrsta terena"
+    />
+  );
+
+  const renderTerrainTypeInput: FormInputProps['renderInput'] = ({ field }) => (
+    <Select
+      value={field.value}
+      onChange={field.onChange}
+      options={TERRAIN_TYPE_ARRAY.map(el => ({
+        id: el,
+        label: el,
+      }))}
+      placeholder="Vrsta podloge"
+    />
+  );
+
   const refreshView = () => {
     const page = Number(searchParams.get('page')) || PAGE_NUMBER;
     const search = searchParams.get('search') || '';
@@ -109,6 +150,7 @@ const CreateObjectModal = ({ isOpen, onClose }: CreateObjectModalProps) => {
     if (payload) {
       onClose();
       refreshView();
+      setImageUrl('');
     }
   };
 
@@ -140,11 +182,15 @@ const CreateObjectModal = ({ isOpen, onClose }: CreateObjectModalProps) => {
                   <FileUpload onFileSelected={handleFileSelected} />
                 </Stack>
                 {uploading && <CircularProgress />}
-                {imageUrl && <Typography variant="body2">{imageUrl}</Typography>}
+                {imageUrl && !uploading && <Typography variant="body2">{imageUrl}</Typography>}
               </Stack>
               <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
                 <FormInput name="name" placeholder="Naziv objekta" validate={FormValidator.isNotEmpty} />
-                <FormInput name="location" placeholder="Lokacija" validate={FormValidator.isNotEmpty} />
+                <FormInput name="location" renderInput={renderCityInput} />
+              </Stack>
+              <Stack direction={isMobile ? 'column' : 'row'} spacing={2} mt={2}>
+                <FormInput name="type" renderInput={renderObjectTypeInput} />
+                <FormInput name="terrainType" renderInput={renderTerrainTypeInput} />
               </Stack>
               <Stack direction={isMobile ? 'column' : 'row'} spacing={2} mt={2}>
                 <FormInput

@@ -7,6 +7,8 @@ export interface ObjectModel {
   image?: string | null;
   workTimeFrom: string;
   workTimeTo: string;
+  type: string;
+  terrainType: string;
   unavailablePeriods: UnavailablePeriod[];
   createdAt?: string;
   updatedAt?: string;

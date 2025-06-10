@@ -21,7 +21,7 @@ dayjs.extend(timezone);
 const djLocalizer = dayjsLocalizer(dayjs);
 
 const EventComponent = ({ event }: { event: { title: string } }) => (
-  <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{event.title}</div>
+  <div style={{ whiteSpace: 'wrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{event.title}</div>
 );
 
 const Calendar = () => {
@@ -44,7 +44,7 @@ const Calendar = () => {
         const end = dayjs(start).add(1, 'hour').toDate();
 
         return {
-          title: `${r.object.name}`,
+          title: `${r.object.name} - ${r.user.email.split('@')[0]}`,
           start,
           end,
           allDay: false,

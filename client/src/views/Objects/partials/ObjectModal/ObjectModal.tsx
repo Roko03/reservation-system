@@ -18,7 +18,8 @@ interface ObjectModalProps {
 
 const ObjectModal = ({ onClose }: ObjectModalProps) => {
   const { selectedObject } = useObjectStore();
-  const { name, location, image, workTimeFrom, workTimeTo, unavailablePeriods } = selectedObject || {};
+  const { name, location, image, workTimeFrom, type, terrainType, workTimeTo, unavailablePeriods } =
+    selectedObject || {};
   const { isMobile } = useBreakpoint();
 
   return (
@@ -32,6 +33,18 @@ const ObjectModal = ({ onClose }: ObjectModalProps) => {
             Lokacija:
           </Typography>
           <Typography variant="body1">{location}</Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" spacing={0.5}>
+          <Typography variant="body1" fontWeight={600}>
+            Vrsta terena:
+          </Typography>
+          <Typography variant="body1">{type}</Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" spacing={0.5}>
+          <Typography variant="body1" fontWeight={600}>
+            Vrsta podloge:
+          </Typography>
+          <Typography variant="body1">{terrainType}</Typography>
         </Stack>
         <Stack direction="row" alignItems="center" spacing={0.5}>
           <Typography variant="body1" fontWeight={600}>
