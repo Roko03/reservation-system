@@ -33,7 +33,12 @@ export class ObjectService {
     return objects;
   }
 
-  async getAllObjects(pageSize: number, currentPage: number, search?: string) {
+  async getAllObjects(
+    pageSize: number,
+    currentPage: number,
+    search?: string,
+    city?: string,
+  ) {
     const skip = currentPage * pageSize;
 
     const where: any = {};
@@ -42,6 +47,13 @@ export class ObjectService {
       where.OR = [
         { name: { contains: search, mode: 'insensitive' } },
         { location: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    if (city) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { location: { contains: city, mode: 'insensitive' } },
       ];
     }
 
@@ -57,6 +69,8 @@ export class ObjectService {
           image: true,
           workTimeFrom: true,
           workTimeTo: true,
+          type: true,
+          terrainType: true,
           unavailablePeriods: {
             select: { startDate: true, endDate: true },
           },
@@ -295,6 +309,9 @@ export class ObjectService {
       where: {
         objectId,
         date: targetDate,
+        status: {
+          in: ['PENDING', 'APPROVED'],
+        },
       },
       select: {
         time: true,

@@ -54,6 +54,8 @@ model Object {
   updatedAt   DateTime @updatedAt
   workTimeFrom String
   workTimeTo  String
+  type String
+  terrainType String
 
   unavailablePeriods  UnavailablePeriod[]
 

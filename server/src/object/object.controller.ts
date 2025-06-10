@@ -43,11 +43,12 @@ export class ObjectController {
     @Query('pageSize') pageSize: string,
     @Query('currentPage') currentPage: string,
     @Query('search') search?: string,
+    @Query('city') city?: string,
   ) {
     const size = pageSize ? parseInt(pageSize, 10) : 10;
     const page = currentPage ? parseInt(currentPage, 10) : 0;
 
-    return this.objectService.getAllObjects(size, page, search);
+    return this.objectService.getAllObjects(size, page, search, city);
   }
 
   @Post()

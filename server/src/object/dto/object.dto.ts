@@ -47,6 +47,14 @@ export class ObjectDto {
   @IsNotEmpty({ message: 'Unesite lokaciju' })
   location: string;
 
+  @IsString()
+  @IsNotEmpty({ message: 'Unesite vrstu terena' })
+  type: string;
+
+  @IsString()
+  @IsNotEmpty({ message: 'Unesite vrstu podloge' })
+  terrainType: string;
+
   @IsUrl({}, { message: 'Unesite ispravan URL slike' })
   @IsNotEmpty({ message: 'Unesite URL slike' })
   image: string;

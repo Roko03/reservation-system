@@ -38,6 +38,14 @@ export class EditObjectDto {
   location?: string;
 
   @IsOptional()
+  @IsString()
+  type?: string;
+
+  @IsOptional()
+  @IsString()
+  terrainType?: string;
+
+  @IsOptional()
   @IsUrl({}, { message: 'Unesite ispravan URL slike' })
   image?: string;
 
