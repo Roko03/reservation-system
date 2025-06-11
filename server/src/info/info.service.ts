@@ -16,4 +16,49 @@ export class InfoService {
       numberOfReservations: reservationsCount,
     };
   }
+
+  async getReservationsByMonth(year?: number) {
+    const currentYear = year || new Date().getFullYear();
+
+    const reservations = await this.prisma.reservation.findMany({
+      where: {
+        date: {
+          gte: new Date(`${currentYear}-01-01`),
+          lt: new Date(`${currentYear + 1}-01-01`),
+        },
+      },
+      select: {
+        date: true,
+      },
+    });
+
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    const monthCounts = Array(12).fill(0);
+
+    reservations.forEach((reservation) => {
+      const month = reservation.date.getMonth(); // 0-11
+      monthCounts[month]++;
+    });
+
+    return {
+      year: currentYear,
+      months: monthNames,
+      counts: monthCounts,
+      total: reservations.length,
+    };
+  }
 }
