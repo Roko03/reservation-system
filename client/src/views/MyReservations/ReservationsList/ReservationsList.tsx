@@ -43,7 +43,7 @@ const ReservationsList = () => {
         </Grid>
         <Stack pt={4} margin="auto" maxWidth={1100}>
           <Pagination
-            page={pageNumber + 1}
+            page={pageNumber}
             onChange={handlePageChange}
             count={Math.ceil(totalCount / PAGE_SIZE)}
             hideText

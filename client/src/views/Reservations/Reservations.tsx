@@ -45,7 +45,7 @@ const Reservations = () => {
   const [objects, setObjects] = useState<ObjectModel[] | null>(null);
   const [searchString, setSearchString] = useState<string>('');
 
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(DateTime.now());
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
   const [selectedObjectId, setSelectedObjectId] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<ReservationStatus | null>(null);
 
@@ -170,7 +170,7 @@ const Reservations = () => {
                 ),
               }))}
             />
-            <Pagination page={pageNumber + 1} onChange={handlePageChange} count={Math.ceil(totalCount / PAGE_SIZE)} />
+            <Pagination page={pageNumber} onChange={handlePageChange} count={Math.ceil(totalCount / PAGE_SIZE)} />
           </Paper>
         </Container>
       </Layout>

@@ -18,7 +18,6 @@ export class ReservationService {
     },
   ) {
     const skip = currentPage * pageSize;
-
     const where: any = {};
 
     if (filters.objectId) {
@@ -31,11 +30,9 @@ export class ReservationService {
 
     if (filters.dateFrom || filters.dateTo) {
       where.date = {};
-
       if (filters.dateFrom) {
         where.date.gte = new Date(filters.dateFrom);
       }
-
       if (filters.dateTo) {
         where.date.lte = new Date(filters.dateTo);
       }
@@ -46,11 +43,13 @@ export class ReservationService {
         where,
         take: pageSize,
         skip,
+        orderBy: { createdAt: 'desc' }, // Changed from 'date' to 'createdAt'
         select: {
           id: true,
           date: true,
           time: true,
           status: true,
+          createdAt: true, // Added createdAt to select
           user: {
             select: {
               firstname: true,

@@ -12,6 +12,7 @@ import Search from '@/components/Search';
 import Select from '@/components/Select';
 import { PAGE_NUMBER, PAGE_SIZE } from '@/config/constants.config';
 import { CITY_ARRAY } from '@/model/city.model';
+import { OBJECT_TYPE_ARRAY, TERRAIN_TYPE_ARRAY } from '@/model/object-type.model';
 import useQueryParams from '@/utils/hooks/useQueryParams';
 import { clearSelectedObject, getObjects, getSelectedObject } from '@/valtio/objects/objects.action';
 import { useObjectStore } from '@/valtio/objects/objects.store';
@@ -23,6 +24,8 @@ const ObjectsUser = () => {
   const { pageNumber, searchString, handleSearch, handlePageChange } = useQueryParams();
   const { objects, isLoading, totalCount } = useObjectStore();
   const [selectedCity, setSelectedCity] = useState<string>('');
+  const [selectedType, setSelectedType] = useState<string>('');
+  const [selectedTerrainType, setSelectedTerraintype] = useState<string>('');
 
   const { id } = useParams();
 
@@ -43,17 +46,25 @@ const ObjectsUser = () => {
     setSelectedCity(event.target.value);
   };
 
+  const handleTypeSelect = (event: SelectChangeEvent) => {
+    setSelectedType(event.target.value);
+  };
+
+  const handleTerrainTypeSelect = (event: SelectChangeEvent) => {
+    setSelectedTerraintype(event.target.value);
+  };
+
   useEffect(() => {
     const page = pageNumber - PAGE_NUMBER;
 
-    if (selectedCity) {
-      getObjects(page, searchString, selectedCity);
+    if (selectedCity || selectedType || selectedTerrainType) {
+      getObjects(page, searchString, selectedCity, selectedType, selectedTerrainType);
 
       return;
     }
 
     getObjects(page, searchString);
-  }, [pageNumber, searchString, selectedCity]);
+  }, [pageNumber, searchString, selectedCity, selectedTerrainType, selectedType]);
 
   return (
     <>
@@ -90,6 +101,36 @@ const ObjectsUser = () => {
                   minWidth: 250,
                 }}
               />
+              <Select
+                value={selectedType}
+                onChange={handleTypeSelect}
+                options={[
+                  { id: '', label: 'All' },
+                  ...OBJECT_TYPE_ARRAY.map(el => ({
+                    id: el,
+                    label: el,
+                  })),
+                ]}
+                placeholder="Vrsta terena"
+                sx={{
+                  minWidth: 250,
+                }}
+              />
+              <Select
+                value={selectedTerrainType}
+                onChange={handleTerrainTypeSelect}
+                options={[
+                  { id: '', label: 'All' },
+                  ...TERRAIN_TYPE_ARRAY.map(el => ({
+                    id: el,
+                    label: el,
+                  })),
+                ]}
+                placeholder="Vrsta podloge"
+                sx={{
+                  minWidth: 250,
+                }}
+              />
             </Stack>
             <Grid container spacing={2}>
               {objects.map(object => (
@@ -100,7 +141,7 @@ const ObjectsUser = () => {
             </Grid>
             <Stack pt={4} margin="auto" maxWidth={1100}>
               <Pagination
-                page={pageNumber + 1}
+                page={pageNumber}
                 onChange={handlePageChange}
                 count={Math.ceil(totalCount / PAGE_SIZE)}
                 hideText

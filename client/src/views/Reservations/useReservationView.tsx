@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Delete, Edit } from '@mui/icons-material';
 import { ListItemIcon, MenuItem, MenuList, Typography } from '@mui/material';
@@ -19,10 +19,11 @@ interface useReservationViewPayload {
 
 const useReservationView = (): useReservationViewPayload => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const closeUserModal = (): void => {
     clearSelectedReservation();
-    navigate('/admin/reservations');
+    navigate(`/admin/reservations?${searchParams.toString()}`);
   };
 
   const handleApproveClick = (e: React.MouseEvent<HTMLLIElement>): void => {

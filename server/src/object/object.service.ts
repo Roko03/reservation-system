@@ -38,23 +38,43 @@ export class ObjectService {
     currentPage: number,
     search?: string,
     city?: string,
+    type?: string,
+    terrainType?: string,
   ) {
     const skip = currentPage * pageSize;
-
     const where: any = {};
 
+    const andConditions: any[] = [];
+
     if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { location: { contains: search, mode: 'insensitive' } },
-      ];
+      andConditions.push({
+        OR: [
+          { name: { contains: search, mode: 'insensitive' } },
+          { location: { contains: search, mode: 'insensitive' } },
+        ],
+      });
     }
 
     if (city) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { location: { contains: city, mode: 'insensitive' } },
-      ];
+      andConditions.push({
+        location: { contains: city, mode: 'insensitive' },
+      });
+    }
+
+    if (type) {
+      andConditions.push({
+        type: { contains: type, mode: 'insensitive' },
+      });
+    }
+
+    if (terrainType) {
+      andConditions.push({
+        terrainType: { contains: terrainType, mode: 'insensitive' },
+      });
+    }
+
+    if (andConditions.length > 0) {
+      where.AND = andConditions;
     }
 
     const [objects, totalCount] = await this.prisma.$transaction([

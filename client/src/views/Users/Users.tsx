@@ -70,7 +70,7 @@ const Users = () => {
                 role: USER_ROLE_NAME_LABEL_MAP[user.role],
               }))}
             />
-            <Pagination page={pageNumber + 1} onChange={handlePageChange} count={Math.ceil(totalCount / PAGE_SIZE)} />
+            <Pagination page={pageNumber} onChange={handlePageChange} count={Math.ceil(totalCount / PAGE_SIZE)} />
           </Paper>
         </Container>
       </Layout>

@@ -15,13 +15,17 @@ export default class ObjectsService {
   public static async getObjects(
     pageNumber?: number,
     search?: string,
-    city?: string
+    city?: string,
+    type?: string,
+    terrainType?: string
   ): Promise<PaginatedResponse<ObjectModel>> {
     try {
       const queryParams = createQueryParams({
         pageNumber,
         search,
         city,
+        type,
+        terrainType,
       });
 
       const url = `${import.meta.env.VITE_WS_API_URL}/object${queryParams}`;

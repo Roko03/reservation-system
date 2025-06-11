@@ -28,6 +28,7 @@ const ObjectCard = ({ id, name, location, image, workTimeFrom, workTimeTo }: Obj
             width: '100%',
             height: '100%',
             objectFit: 'cover',
+            maxWidth: '50%',
             flex: 1,
           }}
           image={image}
