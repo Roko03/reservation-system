@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
 
 import Modal from '@/components/Modal';
-import { PAGE_NUMBER } from '@/config/constants.config';
+import { PAGE_NUMBER, PAGE_SIZE } from '@/config/constants.config';
 import ObjectsService from '@/services/objects.service';
 import { showToast } from '@/valtio/global/global.actions';
 import { getObjects } from '@/valtio/objects/objects.action';
@@ -20,7 +20,7 @@ const DeleteObjectModal = ({ isOpen, onClose }: DeleteObjectModalProps) => {
     const page = Number(searchParams.get('page')) || PAGE_NUMBER;
     const search = searchParams.get('search') || '';
 
-    getObjects(page - PAGE_NUMBER, search);
+    getObjects(PAGE_SIZE, page - PAGE_NUMBER, search);
   };
 
   const handleConfirm = async (): Promise<void> => {

@@ -10,7 +10,7 @@ import FormInput, { FormInputProps } from '@/components/Forms/FormInput';
 import Modal from '@/components/Modal';
 import Select from '@/components/Select';
 import TimePicker from '@/components/TimePicker/TimePicker';
-import { PAGE_NUMBER } from '@/config/constants.config';
+import { PAGE_NUMBER, PAGE_SIZE } from '@/config/constants.config';
 import { CreateObjectTimeStringFormValues, ObjectFormValues } from '@/config/form-models.config';
 import { CREATE_OBJECT_FORM } from '@/config/forms/form-names.config';
 import { CITY_ARRAY } from '@/model/city.model';
@@ -124,7 +124,7 @@ const CreateObjectModal = ({ isOpen, onClose }: CreateObjectModalProps) => {
     const page = Number(searchParams.get('page')) || PAGE_NUMBER;
     const search = searchParams.get('search') || '';
 
-    getObjects(page - PAGE_NUMBER, search);
+    getObjects(PAGE_SIZE, page - PAGE_NUMBER, search);
   };
 
   const handleSubmit = async (formValues: ObjectFormValues): Promise<void> => {

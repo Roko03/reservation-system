@@ -7,6 +7,7 @@ import ContactSection from '@/components/ContactSection';
 import Layout from '@/components/Layout';
 import MainHeroSection from '@/components/MainHeroSection';
 import ObjectCard from '@/components/ObjectCard';
+import { USER_PAGE_SIZE } from '@/config/constants.config';
 import { UserRoleName } from '@/model/user.model';
 import { roleGuard } from '@/utils/static/roleGuard';
 import { useAuthStore } from '@/valtio/auth/auth.store';
@@ -18,7 +19,7 @@ const Home: React.FC = () => {
   const { objects } = useObjectStore();
 
   useEffect(() => {
-    getObjects(0);
+    getObjects(USER_PAGE_SIZE, 0);
   }, []);
 
   if (user && roleGuard(user.role, [UserRoleName.ADMIN, UserRoleName.SUPERADMIN])) {
@@ -30,7 +31,7 @@ const Home: React.FC = () => {
       <MainHeroSection title="DOBRODOŠLI" description="Pronađite dostupne termine" />
       <Container component="section" maxWidth={false}>
         <Grid container spacing={2} py={4}>
-          {objects.slice(0, 2).map(object => (
+          {objects.slice(0, 6).map(object => (
             <Grid key={object.id} size={{ xs: 12, md: 6, xl: 4 }} justifyContent="center">
               <ObjectCard {...object} />
             </Grid>

@@ -42,7 +42,7 @@ const ObjectsAdmin = () => {
   useEffect(() => {
     const page = pageNumber - PAGE_NUMBER;
 
-    getObjects(page, searchString);
+    getObjects(PAGE_SIZE, page, searchString);
   }, [pageNumber, searchString]);
 
   return (

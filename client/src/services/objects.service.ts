@@ -13,6 +13,7 @@ import { createQueryParams } from '@/utils/static/queryParams';
 
 export default class ObjectsService {
   public static async getObjects(
+    pageSize?: number,
     pageNumber?: number,
     search?: string,
     city?: string,
@@ -21,6 +22,7 @@ export default class ObjectsService {
   ): Promise<PaginatedResponse<ObjectModel>> {
     try {
       const queryParams = createQueryParams({
+        pageSize,
         pageNumber,
         search,
         city,

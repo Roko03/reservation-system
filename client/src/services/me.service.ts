@@ -12,6 +12,7 @@ export default class MeService {
   ): Promise<PaginatedResponse<Omit<ReservationModel, 'user'>>> {
     try {
       const queryParams = createQueryParams({
+        pageSize: 12,
         pageNumber,
       });
 

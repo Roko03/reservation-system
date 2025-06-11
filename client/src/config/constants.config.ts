@@ -31,6 +31,7 @@ export const PUT_REQUEST_PARAMETERS = {
 
 export const PAGE_NUMBER = 1;
 export const PAGE_SIZE = 10;
+export const USER_PAGE_SIZE = 9;
 
 export type SortDirection = 'asc' | 'desc';
 

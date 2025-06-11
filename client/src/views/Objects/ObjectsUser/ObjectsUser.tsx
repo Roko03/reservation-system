@@ -10,7 +10,7 @@ import ObjectCard from '@/components/ObjectCard';
 import Pagination from '@/components/Pagination';
 import Search from '@/components/Search';
 import Select from '@/components/Select';
-import { PAGE_NUMBER, PAGE_SIZE } from '@/config/constants.config';
+import { PAGE_NUMBER, USER_PAGE_SIZE } from '@/config/constants.config';
 import { CITY_ARRAY } from '@/model/city.model';
 import { OBJECT_TYPE_ARRAY, TERRAIN_TYPE_ARRAY } from '@/model/object-type.model';
 import useQueryParams from '@/utils/hooks/useQueryParams';
@@ -58,12 +58,12 @@ const ObjectsUser = () => {
     const page = pageNumber - PAGE_NUMBER;
 
     if (selectedCity || selectedType || selectedTerrainType) {
-      getObjects(page, searchString, selectedCity, selectedType, selectedTerrainType);
+      getObjects(USER_PAGE_SIZE, page, searchString, selectedCity, selectedType, selectedTerrainType);
 
       return;
     }
 
-    getObjects(page, searchString);
+    getObjects(USER_PAGE_SIZE, page, searchString);
   }, [pageNumber, searchString, selectedCity, selectedTerrainType, selectedType]);
 
   return (
@@ -90,7 +90,7 @@ const ObjectsUser = () => {
                 value={selectedCity}
                 onChange={handleCitySelect}
                 options={[
-                  { id: '', label: 'All' },
+                  { id: '', label: 'Svi gradovi' },
                   ...CITY_ARRAY.map(el => ({
                     id: el,
                     label: el,
@@ -105,7 +105,7 @@ const ObjectsUser = () => {
                 value={selectedType}
                 onChange={handleTypeSelect}
                 options={[
-                  { id: '', label: 'All' },
+                  { id: '', label: 'Sve vrste terena' },
                   ...OBJECT_TYPE_ARRAY.map(el => ({
                     id: el,
                     label: el,
@@ -120,7 +120,7 @@ const ObjectsUser = () => {
                 value={selectedTerrainType}
                 onChange={handleTerrainTypeSelect}
                 options={[
-                  { id: '', label: 'All' },
+                  { id: '', label: 'Sve vrste podloge' },
                   ...TERRAIN_TYPE_ARRAY.map(el => ({
                     id: el,
                     label: el,
@@ -143,7 +143,7 @@ const ObjectsUser = () => {
               <Pagination
                 page={pageNumber}
                 onChange={handlePageChange}
-                count={Math.ceil(totalCount / PAGE_SIZE)}
+                count={Math.ceil(totalCount / USER_PAGE_SIZE)}
                 hideText
               />
             </Stack>

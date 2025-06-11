@@ -4,6 +4,7 @@ import { GetAvailableTimesFormValues } from '@/types/available-time.type';
 import { objectsStore } from './objects.store';
 
 export async function getObjects(
+  pageSize?: number,
   page?: number,
   search?: string,
   selectedCity?: string,
@@ -13,6 +14,7 @@ export async function getObjects(
   objectsStore.isLoading = true;
 
   const { entities, totalCount } = await ObjectsService.getObjects(
+    pageSize,
     page,
     search,
     selectedCity,

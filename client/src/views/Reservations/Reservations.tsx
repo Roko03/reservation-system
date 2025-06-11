@@ -88,7 +88,7 @@ const Reservations = () => {
 
   useEffect(() => {
     (async (): Promise<void> => {
-      const { entities } = await ObjectsService.getObjects(0, searchString);
+      const { entities } = await ObjectsService.getObjects(PAGE_SIZE, 0, searchString);
 
       setObjects(entities);
     })();
@@ -131,7 +131,7 @@ const Reservations = () => {
                     value={selectedStatus || ''}
                     onChange={handleStatusSelect}
                     options={[
-                      { id: '', label: 'All' },
+                      { id: '', label: 'Svi statusi' },
                       ...RESERVATION_STATUS_ARRAY.map(status => ({
                         id: status,
                         label: RESERVATION_STATUS_LABEL_MAP[status as ReservationStatus],
