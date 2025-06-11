@@ -6,6 +6,13 @@ export interface InfoModel {
   numberOfReservations: number;
 }
 
+export interface InfoReservationModel {
+  year: number;
+  months: string[];
+  counts: number[];
+  total: number;
+}
+
 export interface InfoItem {
   label: string;
   value: number;

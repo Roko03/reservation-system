@@ -1,14 +1,16 @@
 import { proxy, useSnapshot } from 'valtio';
 
-import { InfoModel } from '@/model/info.model';
+import { InfoModel, InfoReservationModel } from '@/model/info.model';
 
 interface InfoStore {
   info: InfoModel | null;
+  reservations: InfoReservationModel | null;
   isLoading: boolean;
 }
 
 export const infoStore = proxy<InfoStore>({
   info: null,
+  reservations: null,
   isLoading: false,
 });
 

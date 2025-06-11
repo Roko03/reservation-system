@@ -12,6 +12,7 @@ export const createQueryParams = ({
   city,
   type,
   terrainType,
+  year,
 }: {
   pageNumber?: number;
   pageSize?: number;
@@ -23,6 +24,7 @@ export const createQueryParams = ({
   city?: string;
   type?: string;
   terrainType?: string;
+  year?: number;
 }): string => {
   const params = new URLSearchParams(
     Object.entries({
@@ -36,6 +38,7 @@ export const createQueryParams = ({
       city,
       type,
       terrainType,
+      year,
     })
       .filter(([, value]) => value !== undefined)
       .map(([key, value]) => [key, String(value)])

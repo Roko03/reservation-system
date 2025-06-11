@@ -10,3 +10,12 @@ export async function getInfo(): Promise<void> {
   infoStore.isLoading = false;
   infoStore.info = info;
 }
+
+export async function getInfoReservation(year?: number): Promise<void> {
+  infoStore.isLoading = true;
+
+  const reservation = await InfoService.getReservations(year);
+
+  infoStore.isLoading = false;
+  infoStore.reservations = reservation;
+}
