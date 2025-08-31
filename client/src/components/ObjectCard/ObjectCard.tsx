@@ -52,13 +52,15 @@ const ObjectCard = ({ id, name, location, image, workTimeFrom, workTimeTo }: Obj
             </Typography>
           </Stack>
         </CardContent>
-        <CardActions sx={{ p: 2 }}>
-          <Link to={user ? `/objects/${id}` : '/login'}>
-            <Button variant="contained" fullWidth>
-              Rezerviraj
-            </Button>
-          </Link>
-        </CardActions>
+        {user && (
+          <CardActions sx={{ p: 2 }}>
+            <Link to={user ? `/objects/${id}` : '/login'}>
+              <Button variant="contained" fullWidth>
+                Rezerviraj
+              </Button>
+            </Link>
+          </CardActions>
+        )}
       </Stack>
     </Card>
   );
